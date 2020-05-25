@@ -1,2 +1,0 @@
-Dive deeper into:
-    - permutations/combinations
