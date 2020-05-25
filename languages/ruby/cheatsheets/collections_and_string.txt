@@ -1,0 +1,380 @@
+ 
+
+==================================== Enumerable ======================================================
+
+"each", "each_cons", "each_slice"
+
+"each.with_index" == "each_with_index", "each.with_object" == "each_with_object" .. better than a.reduce([]){|arr, elm| ..}
+
+"cycle(3)" is "each" 3 times
+
+"map"/"collect" <||> "reduce"/"inject" ... a.reduce([]){|arr, elm| arr << elm ; arr}  OR better  a.each_with_object([]){|elm, arr| arr << elm }              
+
+"select"/"find_all" <||> "reject"
+
+"find"/"detect" ... returns first found
+
+"find_index" .. for array "find_index" == "index" and array also have "rindex"
+
+"flat_map"/"collect_concat" >>> "map"/"collect"{...}."flatten" 
+
+"drop" <||> "take" ... think of drop as skip
+
+"drop_while" <||> "take_while"   ... act as a switch (drop/take while condition satisfied then switch off for the rest)
+               think of it as drop leading or take leading
+
+"partition" returns 2 arrays => one for true one for false
+
+"group_by" returns a hash with values grouped by result of block
+
+"count", "length"/"size"  "count" is more general and more versatile than "length" or "size"
+
+"none?", "one?", "any?", "all?", "empty?"
+
+"include?"/"member?"
+
+"sort"/"sort_by"   .... arr.sort_by(&:length)
+
+"min", "max", "minmax", "min_by", "max_by", "minmax_by"
+
+"first"/"last" .. !!! last not for hash !!!
+
+"zip" 
+
+"grep"
+
+"lazy"
+
+"reverse_each"
+
+"to_a", "to_h"
+
+----- others
+
+"slice_after", "slice_before", "slice_when"
+
+
+==================================== Array ======================================================
+
+----- redundant with Enumerable
+
+"index"/"find_index" <||> "rindex"
+"keep_if"/"select!"
+"delete_if"/"reject!"
+
+----- common with hash
+
+"assoc" <||> "rassoc"  ... like hash assoc/rassoc
+
+"fetch" ... may raise an Exception or return a default | like for hash
+
+"empty?" ... true for []
+
+"delete(value)"
+"delete_at(index)" ... not for hash though
+"clear"
+
+"flatten[!]" ... recursive by default unlike for hash
+
+"replace(other_ary)"
+
+"values_at(i1, i2 ...)" OR "values_at(4..6, 3..6)
+
+"shift"
+
+----- specific
+
+
+"last","first" ... "first" also in Enumerable
+
+"pop", "push", "shift", "unshift", "insert", "slice"
+
+"index(val)" <||> "rindex(val)"
+
+"compact" ... removes only nil values
+
+"reverse"
+
+"uniq"
+
+"fill"
+
+"rotate"
+
+"transpose" ... swap rows and cols (see hash invert) | [[1,2,3], [4,5,6], [7,8,9]] => [[1, 4, 7], [2, 5, 8], [3, 6, 9]]
+
+"sample", "shuffle"
+
+"initialize_copy(other)"/"replace(other)"
+
+"pack"  ... see string unpack
+
+----- operators
+
+* str / "join(str)"
+* int / [1,2]*2 => [1,2,1,2]
++ arr / "concat(other)"
+- arr (diff) [ 1, 1, 2, 2, 3, 3, 4, 5 ] - [ 1, 2, 4 ]  #=>  [ 3, 3, 5 ] (duplicates NOT removed)
+| union ... [a,b,c] | [c,d,a] => [a,b,c,d] (duplicates removed)
+& intersection  ... [ 1, 1, 3, 5 ] & [ 1, 2, 3 ] #=> [ 1, 3 ] (duplicates removed)
+^ not exists for arrays (like for set) but can be computed as (a|b) - (a&b)
+<< , <=>
+
+----- conversion
+
+"try_convert(obj)" ... calls to_ary on obj
+
+"to_a", "to_ary", "to_h", "to_s"
+
+----- others
+
+"bsearch", "permutation", "product", "repeated_combination", "repeated_permutation"
+
+
+
+
+==================================== Hash ======================================================
+
+---- redundant with Enumerable
+
+"keep_if"/"select!"
+"delete_if"/"reject!"
+
+----- common with array
+
+"assoc" <||> "rassoc" ... like array assoc/rassoc
+
+"fetch" ... may raise an Exception or return a default | like for array
+
+"empty?" ... true for {}
+
+"delete(key)" ... delete pair entry for key and returns associated value or default 
+"clear"
+
+"flatten" not recursive by default as for array / returns an array / does not have ! alternative
+
+"replace(other)"
+
+"values_at(i1, i2 ...)"
+
+"shift" ... removes and returns first pair as an array
+
+----- specific
+
+"each"/"each_pair", "each_key"/"keys.each", "each_value"/"values.each"
+
+"key(val)" ... returns corresponding key for given value !not efficient! | also there is "index" which is deprecated
+
+"has_key?(key)"  /"key?(key)"   /"include?(key)"/"member?(key)" 
+"has_value?(val)"/"value?(val)"
+
+"keys", "values"
+
+"default" ... get val that was set to be returned as default for not set keys
+
+"default=" ... or Hash.new(default) ... set default val
+
+"default_proc" ... if hash was created with a block attached returns it as proc
+
+"default_proc=" ... sets a proc helper to return default values for not set keys
+
+"compare_by_identity" ... compares keys by identity
+
+"invert" ... swap keys with values (see array transpose)
+
+"merge", "merge!"/"update" ... where merge is not destructive while merge!/update are
+
+"store(k, v)"  ... redundant with h[k] == v
+
+----- operators
+
+[]
+
+----- conversion
+
+"try_convert(obj)" ... calls to_hash on obj
+
+"to_h", "to_hash", "to_a", "to_s"
+
+
+==================================== Set======================================================
+
+Note: is implemented on Hash and thus iterates elements in the order in which they were inserted
+
+---- redundant with Enumerable
+
+"delete_if"/"reject!"
+"keep_if"/"select!"
+
+----- common with array and hash
+
+"empty?"
+
+"delete(o)" ...  Use "subtract(other)" to delete many items at once
+
+"flatten[!]"   ... no level to flatten accepted like for array or hash / flattens only other inner sets
+
+"replace(enum)"
+
+"clear"
+
+----- specific
+
+"add(o)"/"<<", "add?(o)" <||> "delete(other)","delete?(other)"  ... delete is not specific to set though but add is
+"merge(enum)" <||> "subtract(enum)"
+"union(enum)" ... see | operator
+"interesection(enum)" ... see & operator
+"difference(enum)" ... see - operator
+
+"classify" ... kind of group_by from enumerable / returns dict
+"divide(&func)" ... like "classify" but without keys. if classify returns dict divide returns set of sets 
+
+"disjoint?(set)" <||> "intersect?(set)" ... see ^/& operators
+"proper_subset?(set)" <||> "proper_superset?(set)" ... proper stands for [super/sub]set BUT not equal ... see < > operators
+"subset?(set)" <||> "superset?(set)" ... see <= >= operators
+
+"initialize_clone(orig)" , "initialize_dup(orig)"
+
+----- operators
+
+& / "interesection(enum)"
++ / | / "union(enum)" ... see "merge"
+- / "difference" ... see "subtract"
+< / "proper_subset?"
+> / "proper_superset?"
+<= / "subset?"
+>= / "superset?"
+<< / "add(o)" ... use "merge" to add many elements at once
+==
+^ ... xor (set ^ enum) is equivalent to ((set | enum) - (set & enum))
+
+----- conversion
+
+"to_a", "to_set"
+
+
+==================================== String ======================================================
+
+----- specific
+
+str.b ... ASCII 8 encoded version of str
+
+upto(other) .. "a8".upto("b6") .. like for numbers / there is no downto equivalent like for numbers
+
+each_char
+each_byte
+each_codepoint (for utf)
+each_line
+
+chars       ... shortcut for str.each_char.to_a
+bytes       ... shortcut for str.each_byte.to_a
+codepoints  ... shortcut for str.each_codepoint.to_a
+lines       ... shortcut for str.each_line(separator).to_a
+
+chr <||> ord
+
+casecmp(other) ... insensitive version of <=>
+
+length/size .. length in chars
+count('c') ... return how many occurences of c in string
+bytesize .... length in bytes
+
+slice[!](i,j/i..j/regex) .. like [] operator
+biteslice(i, j)
+setbyte(i, int)
+split(pattern, limit)
+partition(sep/regex) <||> rpartition(sep/regex) ... "he@lo".partition("@") #=> ["he", "@", "lo"]
+
+
+reverse
+upcase[!], downcase[!], swapcase[!]
+capitalize[!]
+center(width, padstr=" "), ljust(width, padstr=" "), rjust(width, padstr=" ")
+strip[!], lstrip[!], rstrip[!]
+chomp[!], chop[!]
+"tr[!](from, to)"   ... "hello".tr('el', 'ip')      #=> "hippo" 
+"tr_s[!](from, to)" ... "hello".tr_s('l', 'r')     #=> "hero"
+replace(other) ... replace itself with other
+concat(other) ... +
+prepend(other) <||> << ... there is no append, only << operator
+insert(i, other) ... [] operator can do this too (str[0,0] = '*') but [] is far more versatile
+delete(other) ... 
+clear
+
+empty?, include?(other)
+ends_with(*sufixes), start_with(*prefixes)
+
+hex, oct ... also see str.to_i(base) and int.to_s(base)
+
+encode[!](encoding), encoding, force_encoding(encoding), valid_encoding?
+unpack(format) ... see array pack ... also unpack is kind of inverse for encode
+
+
+next[!]/succ[!]
+
+----- operators
+<=>        ... compare
+% []/{}    ...format string
+* int      ... repeat string
++ str      ... concat()
+<< str/int <||> prepend(other)
+=~ regex   ... match regex and return index of match and sets $~ as Regexp.last_match
+[]         ... slice()
+----- conversion
+
+"try_convert(obj)" ... calls to_str on obj
+"to_c" (to complex), "to_f", "to_i(base)", "to_r" (to rational), "to_s", "to_str", "to_sym"/"intern"
+
+----- others
+
+crypt(salt)
+dump
+scrub[!](char) ... replace invalid bytes sequence with char
+squeeze[!]([other_str]*) ... #=> "putters shoot balls".squeeze("m-z")   #=> "puters shot balls"
+sum(n=16) ... returns not particularly good  checksum
+
+----- pattern matching
+
+"string =~ pattern" return index for found substring and populates $~ with MatchData
+"match(pattern)" returns MatchData or if block provided passes it to the block
+[pattern] ..."ruby123"[/\d+/] # "123"
+"scan(pattern)"
+"slice(pattern)" ... synonymous with [pattern]
+"slice!(pattern)" ... returns substring and removes it too
+"split(pattern)"
+"index(pattern)","rindex(pattern)"
+"[g]sub[!](pattern [, repl\0\1ace])"[{|f|}]
+
+--- Regex
+
+Regexp::new/Regexp::compile
+Regexp::escape/Regexp::quote
+Regexp::last_match
+Regexp::union
+Regexp::try_convert(obj) calls to_regexp on obj 
+
+
+pattern.names
+pattern.named_captures
+pattern.match
+pattern.option
+pattern.source
+
+--- MatchData
+
+data = $~ or Regexp.last_match
+
+data.length/data.size
+data.regexp <||> data.string
+data.captures
+data.post_match, data.pre_match
+data[i/:k]
+
+data.begin(i/:k), data.end(i/:k), data.offset(i/:k)
+data.values_at
+
+data.names ... shortcut for data.regexp.names
+
+data.to_a, data.to_s
+
+

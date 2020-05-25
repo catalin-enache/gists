@@ -1,0 +1,131 @@
+
+
+
+======================================= Time =====================================================
+
+--------------------------------------- core ---------------------------
+
+----- class methods
+
+(year, month, day, hour, min, sec, '+02:00' for ::new() only)
+::new considers locale offset by default and accepts locale offset as last param
+::gm / ::utc
+::local / ::mktime ... Same as ::gm, but interprets the values in the local time zone 
+::now  ... like ::new without args
+
+::at(timestamp)
+
+
+----- instance methods
+
+
+ctime/asctime ... just a canonical representation ("Fri Jan 23 17:04:51 2015)
+
+day, year, mon/month, wday, yday, mday, hour, min, sec, (nsec, usec, subsec),(tv_nsec, tv_sec, tv_usec), zone
+
+gmtime/utc    ... Converts time to UTC (GMT), !!modifying!! the receiver
+/\
+||
+\/
+localtime([utc_offset = local_default]) ... Converts time to local time !!modifying!! the receiver
+
+getgm/getutc  ... Returns a new Time object representing time in UTC.
+/\
+||
+\/
+getlocal([utc_offset = local_default]) ... Returns a new Time object representing time in local time
+
+gmt_offset/gmtoff/utc_offset ... returns timezone offset in seconds
+
+utc?/gmtime?
+dst?/isdst  .. returns whether is Daylight Saving Time  in its time zone
+sunday?, monday?, tuesday?, wednesday, thursday? friday?, saturday?
+
+
+round(ndigits) ... Rounds sub seconds to a given precision in decimal digits
+
+strftime(string)  ... Time.now.getgm.strftime('%Y-%m-%d %H:%M:%S')
+
+
+----- operators
+
++
+-
+<=> // means < == > available too
+
+----- conversion
+
+to_i timestamp
+to_f timestamp + microseconds
+to_a [sec, min, hour, day, month, year, wday, yday, isdst, zone]
+to_r
+to_s
+
+--------------------------------------- std-lib---------------------------
+
+require 'time'  # enhance builtin Time with the following methods
+
+----- class methods
+
+::parse(str, [now=self.now]){[block]}  
+         ... Time.parse("2010-10-31 06:03:45") or Time.parse("12:00") / the missing parts are inferred
+::strptime(str, format, [now=self.now]) 
+         ... Time.strptime("2000-10-31", "%Y-%m-%d")  ... needs the format instead of trying to use heuristics
+
+
+::iso8601(date)
+::rfc822(date)
+::rfc2822(date)
+::httpdate(date)
+::xmlschema(date)
+
+----- instance methods
+
+iso8601    ... 2011-10-05T22:26:12-04:00
+rfc822     ... Fri, 23 Jan 2015 17:49:45 +0200
+rfc2822    ... Wed, 05 Oct 2011 22:26:12 -0400
+httpdate   ... Thu, 06 Oct 2011 02:26:12 GMT
+xmlschema  ... 2015-01-23T17:46:16+02:00
+
+
+
+
+
+======================================= Date =====================================================
+
+Note: 'date' provides two classes Date and DateTime
+      date is not part of core but of std-lib
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+======================================= DateTime=====================================================
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
