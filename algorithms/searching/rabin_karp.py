@@ -29,9 +29,6 @@ def mod(a, b):
 def mod(a, b):
     c = a % b
     return c + b if c < 0 else c
-
-def mod(a, n):
-    return a - n * floor(a / n)
 """
 
 d = 256  # the base
