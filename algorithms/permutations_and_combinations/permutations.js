@@ -31,6 +31,24 @@ function *permutationNK(seq, k) {
   }
 }
 
+function *permutations_nk_using_stack_2(seq, k=seq.length) {
+    const stack = [[[], seq.reverse()]];
+    while (stack.length) {
+        const [head, tail] = stack.pop();
+        if (head.length < k) {
+            for (let i = 0; i < tail.length; i += 1) {
+                const new_head = [...head, tail[i]];
+                const new_tail = [...tail.slice(0, i), ...tail.slice(i + 1)];
+                stack.push([new_head, new_tail]);
+            }
+        } else {
+            yield head;
+        }
+    }
+}
+
 for (const perm of permutationNK([0, 1, 2], 3)) console.log(perm);
 console.log('-'.repeat(10));
 for (const perm of permutation([0, 1, 2])) console.log(perm);
+console.log('-'.repeat(10));
+for (const perm of permutations_nk_using_stack_2([0, 1, 2])) console.log(perm);
