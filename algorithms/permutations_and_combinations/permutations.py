@@ -109,6 +109,18 @@ def permutations_nk_using_stack(seq, k=None):
                 stack.append([new_head, new_tail])
 
 
+def permutations_nk_using_stack_2(seq, k):
+    k = k if k is not None else len(seq)
+    stack = [[[], list(reversed(seq))]]
+    while len(stack):
+        head, tail = stack.pop()
+        if len(head) < k:
+            for i in range(len(tail)):
+                stack.append([head + [tail[i]], tail[0:i] + tail[i+1:]])
+        else:
+            yield head
+
+
 def itertools_impl_odometer_permutations_dec(n, k):
     """
     https://docs.python.org/3/library/itertools.html#itertools.permutations
@@ -183,6 +195,7 @@ perms = list(itertools_impl_odometer_permutations_dec(4, 3))
 # perms = list(perm_1([0, 1, 2], 2))
 # perms = list(permutations_rec_nk([0, 1, 2], 2))
 # perms = list(permutations_nk_using_stack([0, 1, 2], 2))
+# perms = list(permutations_nk_using_stack_2([0, 1, 2], 2))
 # perms = list(permutations_rec_n([0, 1, 2, 3]))
 # perms = list(odometer_permutations_countdown([0, 1, 2, 3]))
 
