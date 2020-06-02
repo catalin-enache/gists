@@ -65,10 +65,12 @@ def subsets_rec(seq):
 
 # https://leetcode.com/articles/subsets/
 def subsets_iter(seq: List[int]) -> List[List[int]]:
-    output = [[]]
+    stack = [[]]
     for el in seq:
-        output += [curr + [el] for curr in output]
-    return output
+        # for i in range(len(stack)):
+        #     stack.append([el] + stack[i])
+        stack += [curr + [el] for curr in stack]
+    return stack
 
 
 N = 4
