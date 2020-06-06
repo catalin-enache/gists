@@ -1,4 +1,5 @@
 import {
+  treeBuilder,
   afterBin,
   beforeBin,
   bfs, bfsBin, bfsBin2, buildExpressionTree,
@@ -16,16 +17,27 @@ import {
   preorderIter
 } from "./tree_traversing.js";
 
+const tree_one = {
+    'value': 1, 'children': [
+        {'value': 2, 'children': [
+            {'value': 5, 'children': []},
+            {'value': 6, 'children': []},
+            {'value': 7, 'children': []},
+        ]},
+        {'value': 3, 'children': [
+            {'value': 8, 'children': []},
+            {'value': 9, 'children': []},
+            {'value': 10, 'children': []},
+        ]},
+        {'value': 4, 'children': [
+            {'value': 11, 'children': []},
+            {'value': 12, 'children': []},
+            {'value': 13, 'children': []},
+        ]},
+    ]
+}
 
-const root = new Node(1);
-root.children.push(...[2, 3, 4].map((value) => new Node(value)));
-root.children.forEach((child) => child.parent = root);
-find(root, 2).children.push(...[5, 6, 7].map((value) => new Node(value)));
-find(root, 2).children.forEach((child) => child.parent = find(root, 2));
-find(root, 3).children.push(...[8, 9, 10].map((value) => new Node(value)));
-find(root, 3).children.forEach((child) => child.parent = find(root, 3));
-find(root, 4).children.push(...[11, 12, 13].map((value) => new Node(value)));
-find(root, 4).children.forEach((child) => child.parent = find(root, 4));
+const root = treeBuilder(tree_one);
 
 const rootBin = new NodeBin(10);
 rootBin.left = new NodeBin(5);

@@ -3,6 +3,7 @@ export class Node {
   constructor(value) {
     this.value = value;
     this.children = [];
+    this.parent = null;
   }
 }
 
@@ -12,6 +13,21 @@ export class NodeBin {
     this.parent = null;
     this.left = null;
     this.right = null;
+  }
+}
+
+export function treeBuilder(struct, binary = false, node=null) {
+  if (!node) {
+    node = new Node(struct.value);
+    treeBuilder(struct, binary, node);
+    return node;
+  } else {
+    for (let obj of struct.children) {
+      const child = new Node(obj.value);
+      child.parent = node;
+      node.children.push(child);
+      treeBuilder(obj, binary, child)
+    }
   }
 }
 
