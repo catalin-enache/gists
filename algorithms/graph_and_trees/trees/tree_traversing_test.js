@@ -6,7 +6,7 @@ import {
   find,
   findBin,
   findBinIter,
-  printTreeBin,
+  printTree, printTreeBin,
   findPath, subtreeSearchBin, findGEBin, findRange, insertBin, deleteBin,
   firstBin,
   height, inorder, lastBin, lowestCommonAncestor, lowestCommonAncestorBin,
@@ -86,3 +86,4 @@ findBin(rootBin, 20).parent = findBin(rootBin, 15);
 // deleteBin(rootBin, 10);
 // console.dir(rootBin, { depth: null });
 // printTreeBin(rootBin);
+// printTree(root);

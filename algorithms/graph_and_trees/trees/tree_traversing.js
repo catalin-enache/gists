@@ -282,6 +282,13 @@ export function *inorder(node) {
   yield *inorder(node.right);
 }
 
+export function printTree(node, indent = 0) {
+  console.log('\t'.repeat(indent), node.value);
+  for (let child of node.children) {
+    printTree(child, indent + 1)
+  }
+}
+
 export function printTreeBin(node, indent = 0) {
   if (!node) {
     console.log('\t'.repeat(indent), '*');
