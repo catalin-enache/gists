@@ -2,7 +2,7 @@ import {
   treeBuilder,
   afterBin,
   beforeBin,
-  bfs, bfsBin, bfsBin2, buildExpressionTree,
+  bfs, bfs2, bfsBin, bfsBin2, buildExpressionTree,
   depth, eulerTour, evaluateExpressionTree,
   find,
   findBin,
@@ -76,6 +76,7 @@ const rootBin = treeBuilder(binTreeOne, true);
 // console.log(find(root, 7));
 // console.log(findPath(root, 7).path);
 // console.log([...bfs(root)]);
+// console.log(bfs2(root));
 // console.log([...preorder(root)]);
 // console.log([...preorderIter(root)]);
 // console.log([...postorder(root)]);

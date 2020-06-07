@@ -62,10 +62,8 @@ def bfs_bin(node):
     while queue:
         n = queue.pop(0)
         yield n.value
-        if n.left:
-            queue.append(n.left)
-        if n.right:
-            queue.append(n.right)
+        n.left and queue.append(n.left)
+        n.right and queue.append(n.right)
 
 
 def print_tree(node, indent=0):
@@ -166,8 +164,8 @@ if __name__ == '__main__':
     bin_root_one = tree_builder(bin_tree_one, True)
     print('BFS_BIN', list(bfs_bin(bin_root_one)))
 
-    print_tree(root_one)
-    print_bin_tree(bin_root_one)
+    # print_tree(root_one)
+    # print_bin_tree(bin_root_one)
 
 
 

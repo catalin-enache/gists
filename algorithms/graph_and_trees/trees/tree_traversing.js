@@ -231,6 +231,24 @@ export function *bfs(node) {
   }
 }
 
+export function bfs2(node, asc= true) {
+  const result = [];
+  const queue = [node];
+  while (queue.length) {
+    const level = [];
+    const levelSize = queue.length;
+    for (let i  = 0; i < levelSize; i++) {
+      const node = queue.shift();
+      level.push(node.value);
+      for (let child of node.children) {
+        queue.push(child);
+      }
+    }
+    result[asc ? 'push': 'unshift'](level);
+  }
+  return result;
+}
+
 export function *bfsBin(node) {
   const queue = [node];
   while (queue.length) {
