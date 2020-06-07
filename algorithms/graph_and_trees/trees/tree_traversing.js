@@ -5,6 +5,10 @@ export class Node {
     this.children = [];
     this.parent = null;
   }
+
+  toString() {
+    return `Node <${this.value}> [${this.children.map((child) => child.toString())}]`
+  }
 }
 
 export class NodeBin {
@@ -14,20 +18,39 @@ export class NodeBin {
     this.left = null;
     this.right = null;
   }
+  toString() {
+    return `Node <${this.value}> { left: ${this.left ? this.left.toString() : 'null'} right: ${this.right ? this.right.toString() : 'null'} }`
+  }
 }
 
-export function treeBuilder(struct, binary = false, node=null) {
+export function treeBuilder(struct, binary = false, node= null) {
   if (!node) {
-    node = new Node(struct.value);
+    node = binary ? new NodeBin(struct.value) : new Node(struct.value);
     treeBuilder(struct, binary, node);
     return node;
   } else {
-    for (let obj of struct.children) {
-      const child = new Node(obj.value);
-      child.parent = node;
-      node.children.push(child);
-      treeBuilder(obj, binary, child)
+    if (binary) {
+      if (Object.keys(struct.left).length) {
+        const left = new NodeBin(struct.left.value);
+        left.parent = node;
+        node.left = left;
+        treeBuilder(struct.left, binary, left);
+      }
+      if (Object.keys(struct.right).length) {
+        const right = new NodeBin(struct.right.value);
+        right.parent = node;
+        node.right = right;
+        treeBuilder(struct.right, binary, right);
+      }
+    } else {
+      for (let obj of struct.children) {
+        const child = new Node(obj.value);
+        child.parent = node;
+        node.children.push(child);
+        treeBuilder(obj, binary, child);
+      }
     }
+
   }
 }
 

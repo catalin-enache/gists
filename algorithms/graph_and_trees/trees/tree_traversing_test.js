@@ -17,7 +17,7 @@ import {
   preorderIter
 } from "./tree_traversing.js";
 
-const tree_one = {
+const treeOne = {
     'value': 1, 'children': [
         {'value': 2, 'children': [
             {'value': 5, 'children': []},
@@ -35,24 +35,40 @@ const tree_one = {
             {'value': 13, 'children': []},
         ]},
     ]
-}
+};
 
-const root = treeBuilder(tree_one);
+const binTreeOne = {
+  value: 10,
+  left: {
+    value: 5,
+    left: {
+      value: 3,
+      left: {},
+      right: {}
+    },
+    right: {
+      value: 8,
+      left: {},
+      right: {}
+    }
+  },
+  right: {
+    value: 15,
+    left: {
+      value: 13,
+      left: {},
+      right: {}
+    },
+    right: {
+      value: 20,
+      left: {},
+      right: {}
+    }
+  },
+};
 
-const rootBin = new NodeBin(10);
-rootBin.left = new NodeBin(5);
-rootBin.right = new NodeBin(15);
-rootBin.left.parent = rootBin;
-rootBin.right.parent = rootBin;
-findBin(rootBin, 5).left = new NodeBin(3);
-findBin(rootBin, 3).parent = findBin(rootBin, 5);
-findBinIter(rootBin, 5).right = new NodeBin(8);
-findBin(rootBin, 8).parent = findBin(rootBin, 5);
-findBin(rootBin, 15).left = new NodeBin(13);
-findBin(rootBin, 13).parent = findBin(rootBin, 15);
-findBinIter(rootBin, 15).right = new NodeBin(20);
-findBin(rootBin, 20).parent = findBin(rootBin, 15);
-
+const root = treeBuilder(treeOne);
+const rootBin = treeBuilder(binTreeOne, true);
 
 
 // console.log(depth(root, 7));
@@ -71,8 +87,8 @@ findBin(rootBin, 20).parent = findBin(rootBin, 15);
 //   return [node.value].concat(results).reduce((acc, num) => acc + num);
 // }));
 // console.log(lowestCommonAncestor(root, 6, 7).value);
-
-
+// printTree(root);
+// console.log(root.toString());
 
 // console.log(findBin(rootBin, 5).value);
 // console.log(findBinIter(rootBin, 5).value);
@@ -98,4 +114,4 @@ findBin(rootBin, 20).parent = findBin(rootBin, 15);
 // deleteBin(rootBin, 10);
 // console.dir(rootBin, { depth: null });
 // printTreeBin(rootBin);
-// printTree(root);
+// console.log(rootBin.toString());
