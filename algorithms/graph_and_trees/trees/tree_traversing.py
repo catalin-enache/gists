@@ -58,6 +58,19 @@ def find(node, value):
     return None
 
 
+def find_with_path(node, value, path=None):
+    path = [] if path is None else path
+    if node.value == value:
+        path.append(node)
+        return path
+    for child in node.children:
+        result = find_with_path(child, value, path)
+        if len(result):
+            result.append(node)
+            return result
+    return []
+
+
 def find_iter(root, value):
     queue = [root]
     while queue:
@@ -210,8 +223,8 @@ if __name__ == '__main__':
     # print(find(root_one, 'h'))
     # print(find_iter(root_one, 'h'))
     # print(find_bin(bin_root_one, 26))
-
     # print(find_bin_iter(bin_root_one, 26))
+    print(*map(lambda n: n.value, find_with_path(root_one, 'i')))
 
 
 

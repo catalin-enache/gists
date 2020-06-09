@@ -93,19 +93,19 @@ export function findBinIter(node, value) {
   return node;
 }
 
-export function findPath(node, value, path = []) {
+export function findWithPath(node, value, path = []) {
   if (node.value === value) {
-    path.push(node.value);
-    return { node, path };
+    path.push(node);
+    return path;
   }
   for (let child of node.children) {
-    const { node: result } = findPath(child, value, path);
-    if (result) {
-      path.push(node.value);
-      return { node: result, path };
+    const result = findWithPath(child, value, path);
+    if (result.length) {
+      result.push(node);
+      return result;
     }
   }
-  return { node: null, path };
+  return [];
 }
 
 export function subtreeSearchBin(node, value) {
@@ -136,7 +136,7 @@ export function findRange(node, startVal, stopVal) {
 }
 
 export function depth(root, nodeVal) {
-  return findPath(root, nodeVal).path.length - 1;
+  return findWithPath(root, nodeVal).length - 1;
 }
 
 export function depth2(node) {
@@ -374,8 +374,9 @@ export function eulerTour(node, pre, post, depth = 0, path = []) {
 }
 
 export function lowestCommonAncestor(node, a, b) {
-  const { path: path1 } = findPath(node, a);
-  const { path: path2 } = findPath(node, b);
+  const path1 = findWithPath(node, a);
+  const path2 = findWithPath(node, b);
+  if (!path1.length || !path2.length) return null;
   let path1Idx = path1.length - 1;
   let path2Idx = path2.length - 1;
   while (path1Idx >= 0 && path2Idx >= 0) {
@@ -388,7 +389,7 @@ export function lowestCommonAncestor(node, a, b) {
     path2Idx--;
   }
   // also we can return distance between a and b here if we want
-  return findPath(node, path1[path1Idx]).node;
+  return findWithPath(node, path1[path1Idx].value)[0];
 }
 
 export function lowestCommonAncestorBin(node, a, b) {

@@ -7,7 +7,7 @@ import {
   find, findIter,
   findBin, findBinIter,
   printTree, printTreeBin,
-  findPath, subtreeSearchBin, findGEBin, findRange, insertBin, deleteBin,
+  findWithPath, subtreeSearchBin, findGEBin, findRange, insertBin, deleteBin,
   firstBin,
   height, inorder, lastBin, lowestCommonAncestor, lowestCommonAncestorBin,
   Node,
@@ -75,7 +75,7 @@ const rootBin = treeBuilder(binTreeOne, true);
 // console.log(height(root));
 // console.log(find(root, 7));
 // console.log(findIter(root, 7));
-// console.log(findPath(root, 7).path);
+// console.log(findWithPath(root, 7).map((node) => node.value));
 // console.log([...bfs(root)]);
 // console.log(bfs2(root));
 // console.log([...preorder(root)]);
@@ -88,7 +88,7 @@ const rootBin = treeBuilder(binTreeOne, true);
 // }, (node, depth, path, results) => {
 //   return [node.value].concat(results).reduce((acc, num) => acc + num);
 // }));
-// console.log(lowestCommonAncestor(root, 6, 7).value);
+console.log(lowestCommonAncestor(root, 6, 7));
 // printTree(root);
 // console.log(root.toString());
 
