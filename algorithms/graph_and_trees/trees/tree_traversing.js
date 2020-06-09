@@ -63,6 +63,19 @@ export function find(node, value) {
   return null;
 }
 
+export function findIter(root, value) {
+  const queue = [root];
+  while (queue.length) {
+    const node = queue.shift();
+    if (node.value === value) {
+      return node;
+    }
+    for (let child of node.children) {
+      queue.push(child);
+    }
+  }
+}
+
 export function findBin(node, value) {
   if (node === null) return null;
   if (value === node.value) return node;
@@ -74,17 +87,10 @@ export function findBin(node, value) {
 }
 
 export function findBinIter(node, value) {
-  if (node === null) return null;
-  let n = node;
-  while (n !== null) {
-    if (value === n.value) return n;
-    if (value > n.value) {
-      n = n.right
-    } else {
-      n = n.left;
-    }
+  while (node && value !== node.value) {
+    node = value > node.value ? node.right : node.left;
   }
-  return n;
+  return node;
 }
 
 export function findPath(node, value, path = []) {
@@ -131,6 +137,11 @@ export function findRange(node, startVal, stopVal) {
 
 export function depth(root, nodeVal) {
   return findPath(root, nodeVal).path.length - 1;
+}
+
+export function depth2(node) {
+  if (!node.parent) return 0;
+  return 1 + depth2(node.parent);
 }
 
 export function height(node) {

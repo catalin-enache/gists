@@ -48,6 +48,46 @@ def tree_builder(struct, binary=False, node=None):
             tree_builder(obj, binary, child)
 
 
+def find(node, value):
+    if node.value == value:
+        return node
+    for child in node.children:
+        result = find(child, value)
+        if result:
+            return result
+    return None
+
+
+def find_iter(root, value):
+    queue = [root]
+    while queue:
+        node = queue.pop(0)
+        if node.value == value:
+            return node
+        [queue.append(child) for child in node.children]
+    return None
+
+
+def find_bin(node, value):
+    if not node:
+        return None
+    if value == node.value:
+        return node
+    elif value > node.value:
+        return find_bin(node.right, value)
+    else:
+        return find_bin(node.left, value)
+
+
+def find_bin_iter(node, value):
+    while node and node.value != value:
+        if value > node.value:
+            node = node.right
+        else:
+            node = node.left
+    return node
+
+
 def bfs(node):
     queue = [node]
     while queue:
@@ -159,13 +199,19 @@ bin_tree_one = {
 
 if __name__ == '__main__':
     root_one = tree_builder(tree_one)
-    print('BFS', list(bfs(root_one)))
-
     bin_root_one = tree_builder(bin_tree_one, True)
-    print('BFS_BIN', list(bfs_bin(bin_root_one)))
+
+    # print('BFS', list(bfs(root_one)))
+    # print('BFS_BIN', list(bfs_bin(bin_root_one)))
 
     # print_tree(root_one)
     # print_bin_tree(bin_root_one)
+
+    # print(find(root_one, 'h'))
+    # print(find_iter(root_one, 'h'))
+    # print(find_bin(bin_root_one, 26))
+
+    # print(find_bin_iter(bin_root_one, 26))
 
 
 
