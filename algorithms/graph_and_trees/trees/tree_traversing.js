@@ -76,6 +76,21 @@ export function findIter(root, value) {
   }
 }
 
+export function findWithPath(node, value, path = []) {
+  if (node.value === value) {
+    path.push(node);
+    return path;
+  }
+  for (let child of node.children) {
+    const result = findWithPath(child, value, path);
+    if (result.length) {
+      result.push(node);
+      return result;
+    }
+  }
+  return [];
+}
+
 export function findBin(node, value) {
   if (node === null) return null;
   if (value === node.value) return node;
@@ -91,21 +106,6 @@ export function findBinIter(node, value) {
     node = value > node.value ? node.right : node.left;
   }
   return node;
-}
-
-export function findWithPath(node, value, path = []) {
-  if (node.value === value) {
-    path.push(node);
-    return path;
-  }
-  for (let child of node.children) {
-    const result = findWithPath(child, value, path);
-    if (result.length) {
-      result.push(node);
-      return result;
-    }
-  }
-  return [];
 }
 
 export function subtreeSearchBin(node, value) {

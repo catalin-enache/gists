@@ -58,6 +58,16 @@ def find(node, value):
     return None
 
 
+def find_iter(root, value):
+    queue = [root]
+    while queue:
+        node = queue.pop(0)
+        if node.value == value:
+            return node
+        [queue.append(child) for child in node.children]
+    return None
+
+
 def find_with_path(node, value, path=None):
     path = [] if path is None else path
     if node.value == value:
@@ -69,16 +79,6 @@ def find_with_path(node, value, path=None):
             result.append(node)
             return result
     return []
-
-
-def find_iter(root, value):
-    queue = [root]
-    while queue:
-        node = queue.pop(0)
-        if node.value == value:
-            return node
-        [queue.append(child) for child in node.children]
-    return None
 
 
 def find_bin(node, value):
