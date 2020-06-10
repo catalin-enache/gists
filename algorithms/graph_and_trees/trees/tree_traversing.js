@@ -143,41 +143,33 @@ export function findBinWithPath(node, value, path=[]) {
 }
 
 export function firstBin(node) {
-  let walk = node;
-  while (walk.left) walk = walk.left;
-  return walk;
+  while (node.left) node = node.left;
+  return node;
 }
 
 export function lastBin(node) {
-  let walk = node;
-  while (walk.right) walk = walk.right;
-  return walk;
+  while (node.right) node = node.right;
+  return node;
 }
 
 export function beforeBin(node) {
   if (node.left) { return lastBin(node.left); }
-  else {
-    let walk = node;
-    let parent = walk.parent;
-    while(parent !== null && walk === parent.left) {
-      walk = parent;
-      parent = walk.parent;
-    }
-    return parent;
+  let parent = node.parent;
+  while(parent && parent.left === node) {
+    node = parent;
+    parent = node.parent;
   }
+  return parent;
 }
 
 export function afterBin(node) {
   if (node.right) { return firstBin(node.right); }
-  else {
-    let walk = node;
-    let parent = walk.parent;
-    while(parent !== null && walk === parent.right) {
-      walk = parent;
-      parent = walk.parent;
-    }
-    return parent;
+  let parent = node.parent;
+  while(parent && parent.right === node) {
+    node = parent;
+    parent = node.parent;
   }
+  return parent;
 }
 
 export function subtreeSearchBin(node, value) {

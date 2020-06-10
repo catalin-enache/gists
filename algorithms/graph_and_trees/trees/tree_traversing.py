@@ -130,6 +130,38 @@ def find_bin_with_path(node, value, path=None):
         return result
 
 
+def first_bin(node):
+    while node.left:
+        node = node.left
+    return node
+
+
+def last_bin(node):
+    while node.right:
+        node = node.right
+    return node
+
+
+def before_bin(node):
+    if node.left:
+        return last_bin(node.left)
+    parent = node.parent
+    while parent and parent.left == node:
+        node = parent
+        parent = node.parent
+    return parent
+
+
+def after_bin(node):
+    if node.right:
+        return first_bin(node.right)
+    parent = node.parent
+    while parent and parent.right == node:
+        node = parent
+        parent = node.parent
+    return parent
+
+
 def bfs(node):
     queue = [node]
     while queue:
@@ -235,7 +267,7 @@ if __name__ == '__main__':
     # print('BFS_BIN', list(bfs_bin(bin_root_one)))
 
     # print_tree(root_one)
-    # print_tree_bin(bin_root_one)
+    print_tree_bin(bin_root_one)
 
     # print(find(root_one, 'h'))
     # print(find_iter(root_one, 'h'))
@@ -243,6 +275,18 @@ if __name__ == '__main__':
     # print(find_bin_iter(bin_root_one, 26))
     # print(*map(lambda n: n.value, find_with_path(root_one, 'i')))
     # print(*map(lambda n: n.value, find_bin_with_path(bin_root_one, 10)))
+
+    # print(first_bin(bin_root_one).value)
+    # print(last_bin(bin_root_one).value)
+
+    # print(before_bin(find_bin(bin_root_one, 16)))  # 14
+    # print(before_bin(find_bin(bin_root_one, 10)))  # 8
+    # print(before_bin(find_bin(bin_root_one, 4)))  # 2
+    # print(before_bin(find_bin(bin_root_one, 2)))  # None
+
+    # print(after_bin(find_bin(bin_root_one, 16)))  # 18
+    # print(after_bin(find_bin(bin_root_one, 30)))  # None
+    # print(after_bin(find_bin(bin_root_one, 14)))  # 16
 
 
 
