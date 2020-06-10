@@ -172,6 +172,20 @@ export function afterBin(node) {
   return parent;
 }
 
+export function depth(root, nodeVal) {
+  return findWithPath(root, nodeVal).length - 1;
+}
+
+export function depth2(node) {
+  if (!node.parent) return 0;
+  return 1 + depth2(node.parent);
+}
+
+export function height(node) {
+  if (!node.children.length) return 0;
+  return 1 + Math.max(...node.children.map(height));
+}
+
 export function subtreeSearchBin(node, value) {
   if (node.value === value) { return node; }
   else if (value < node.value && node.left) { return subtreeSearchBin(node.left, value); }
@@ -197,20 +211,6 @@ export function findRange(node, startVal, stopVal) {
     walk = afterBin(walk);
   }
   return range;
-}
-
-export function depth(root, nodeVal) {
-  return findWithPath(root, nodeVal).length - 1;
-}
-
-export function depth2(node) {
-  if (!node.parent) return 0;
-  return 1 + depth2(node.parent);
-}
-
-export function height(node) {
-  if (!node.children.length) return 0;
-  return 1 + Math.max(...node.children.map(height));
 }
 
 export function insertBin(node, value) {
