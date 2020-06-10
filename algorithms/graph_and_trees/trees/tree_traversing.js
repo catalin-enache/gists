@@ -108,6 +108,23 @@ export function findBinIter(node, value) {
   return node;
 }
 
+export function findBinWithPath(node, value, path=[]) {
+  if (node === null) return [];
+  if (node.value === value) {
+    path.push(node);
+    return path;
+  }
+  if (value > node.value) {
+    const result = findBinWithPath(node.right, value, path);
+    result.length && result.push(node);
+    return result;
+  } else {
+    const result = findBinWithPath(node.left, value, path);
+    result.length && result.push(node);
+    return result;
+  }
+}
+
 export function subtreeSearchBin(node, value) {
   if (node.value === value) { return node; }
   else if (value < node.value && node.left) { return subtreeSearchBin(node.left, value); }

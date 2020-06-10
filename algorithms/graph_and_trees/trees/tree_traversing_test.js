@@ -4,8 +4,7 @@ import {
   beforeBin,
   bfs, bfs2, bfsBin, bfsBin2, buildExpressionTree,
   depth, depth2, eulerTour, evaluateExpressionTree,
-  find, findIter,
-  findBin, findBinIter,
+  find, findIter, findBin, findBinIter, findBinWithPath,
   printTree, printTreeBin,
   findWithPath, subtreeSearchBin, findGEBin, findRange, insertBin, deleteBin,
   firstBin,
@@ -88,12 +87,13 @@ const rootBin = treeBuilder(binTreeOne, true);
 // }, (node, depth, path, results) => {
 //   return [node.value].concat(results).reduce((acc, num) => acc + num);
 // }));
-console.log(lowestCommonAncestor(root, 6, 7));
+// console.log(lowestCommonAncestor(root, 6, 7));
 // printTree(root);
 // console.log(root.toString());
 
 // console.log(findBin(rootBin, 5).value);
 // console.log(findBinIter(rootBin, 5).value);
+// console.log(findBinWithPath(rootBin, 8).map((node) => node.value)); // [8, 5, 10]
 // console.log(subtreeSearchBin(rootBin, 4).value); // 3
 // console.log(subtreeSearchBin(rootBin, 6).value); // 8
 // console.log(findGEBin(rootBin, 4).value); // 5

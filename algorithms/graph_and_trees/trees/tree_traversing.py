@@ -101,6 +101,23 @@ def find_bin_iter(node, value):
     return node
 
 
+def find_bin_with_path(node, value, path=None):
+    path = path if path is not None else []
+    if not node:
+        return []
+    if node.value == value:
+        path.append(node)
+        return path
+    if value > node.value:
+        result = find_bin_with_path(node.right, value, path)
+        len(result) and result.append(node)
+        return result
+    else:
+        result = find_bin_with_path(node.left, value, path)
+        len(result) and result.append(node)
+        return result
+
+
 def bfs(node):
     queue = [node]
     while queue:
@@ -224,7 +241,8 @@ if __name__ == '__main__':
     # print(find_iter(root_one, 'h'))
     # print(find_bin(bin_root_one, 26))
     # print(find_bin_iter(bin_root_one, 26))
-    print(*map(lambda n: n.value, find_with_path(root_one, 'i')))
+    # print(*map(lambda n: n.value, find_with_path(root_one, 'i')))
+    # print(*map(lambda n: n.value, find_bin_with_path(bin_root_one, 10)))
 
 
 
