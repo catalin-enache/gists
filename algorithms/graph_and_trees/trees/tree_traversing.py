@@ -48,6 +48,18 @@ def tree_builder(struct, binary=False, node=None):
             tree_builder(obj, binary, child)
 
 
+def print_tree(node, indent=0):
+    print('\t' * indent + str(node.value))
+    for child in node.children:
+        print_tree(child, indent + 1)
+
+
+def print_tree_bin(node, indent=0):
+    node.right and print_tree_bin(node.right, indent + 1)
+    print('\t' * indent + str(node.value))
+    node.left and print_tree_bin(node.left, indent + 1)
+
+
 def find(node, value):
     if node.value == value:
         return node
@@ -134,18 +146,6 @@ def bfs_bin(node):
         yield n.value
         n.left and queue.append(n.left)
         n.right and queue.append(n.right)
-
-
-def print_tree(node, indent=0):
-    print('\t' * indent + str(node.value))
-    for child in node.children:
-        print_tree(child, indent + 1)
-
-
-def print_bin_tree(node, indent=0):
-    node.right and print_bin_tree(node.right, indent + 1)
-    print('\t' * indent + str(node.value))
-    node.left and print_bin_tree(node.left, indent + 1)
 
 
 tree_one = {
@@ -235,7 +235,7 @@ if __name__ == '__main__':
     # print('BFS_BIN', list(bfs_bin(bin_root_one)))
 
     # print_tree(root_one)
-    # print_bin_tree(bin_root_one)
+    # print_tree_bin(bin_root_one)
 
     # print(find(root_one, 'h'))
     # print(find_iter(root_one, 'h'))

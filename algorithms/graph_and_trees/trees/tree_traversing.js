@@ -54,6 +54,23 @@ export function treeBuilder(struct, binary = false, node= null) {
   }
 }
 
+export function printTree(node, indent = 0) {
+  console.log('\t'.repeat(indent), node.value);
+  for (let child of node.children) {
+    printTree(child, indent + 1)
+  }
+}
+
+export function printTreeBin(node, indent = 0) {
+  if (!node) {
+    console.log('\t'.repeat(indent), '*');
+    return;
+  }
+  printTreeBin(node.right, indent + 1);
+  console.log('\t'.repeat(indent), node.value);
+  printTreeBin(node.left, indent + 1);
+}
+
 export function find(node, value) {
   if (node.value === value) return node;
   for (let child of node.children) {
@@ -125,6 +142,44 @@ export function findBinWithPath(node, value, path=[]) {
   }
 }
 
+export function firstBin(node) {
+  let walk = node;
+  while (walk.left) walk = walk.left;
+  return walk;
+}
+
+export function lastBin(node) {
+  let walk = node;
+  while (walk.right) walk = walk.right;
+  return walk;
+}
+
+export function beforeBin(node) {
+  if (node.left) { return lastBin(node.left); }
+  else {
+    let walk = node;
+    let parent = walk.parent;
+    while(parent !== null && walk === parent.left) {
+      walk = parent;
+      parent = walk.parent;
+    }
+    return parent;
+  }
+}
+
+export function afterBin(node) {
+  if (node.right) { return firstBin(node.right); }
+  else {
+    let walk = node;
+    let parent = walk.parent;
+    while(parent !== null && walk === parent.right) {
+      walk = parent;
+      parent = walk.parent;
+    }
+    return parent;
+  }
+}
+
 export function subtreeSearchBin(node, value) {
   if (node.value === value) { return node; }
   else if (value < node.value && node.left) { return subtreeSearchBin(node.left, value); }
@@ -164,44 +219,6 @@ export function depth2(node) {
 export function height(node) {
   if (!node.children.length) return 0;
   return 1 + Math.max(...node.children.map(height));
-}
-
-export function firstBin(node) {
-  let walk = node;
-  while (walk.left) walk = walk.left;
-  return walk;
-}
-
-export function lastBin(node) {
-  let walk = node;
-  while (walk.right) walk = walk.right;
-  return walk;
-}
-
-export function beforeBin(node) {
-  if (node.left) { return lastBin(node.left); }
-  else {
-    let walk = node;
-    let parent = walk.parent;
-    while(parent !== null && walk === parent.left) {
-      walk = parent;
-      parent = walk.parent;
-    }
-    return parent;
-  }
-}
-
-export function afterBin(node) {
-  if (node.right) { return firstBin(node.right); }
-  else {
-    let walk = node;
-    let parent = walk.parent;
-    while(parent !== null && walk === parent.right) {
-      walk = parent;
-      parent = walk.parent;
-    }
-    return parent;
-  }
 }
 
 export function insertBin(node, value) {
@@ -365,23 +382,6 @@ export function *inorder(node) {
   yield *inorder(node.left);
   yield node.value;
   yield *inorder(node.right);
-}
-
-export function printTree(node, indent = 0) {
-  console.log('\t'.repeat(indent), node.value);
-  for (let child of node.children) {
-    printTree(child, indent + 1)
-  }
-}
-
-export function printTreeBin(node, indent = 0) {
-  if (!node) {
-    console.log('\t'.repeat(indent), '*');
-    return;
-  }
-  printTreeBin(node.right, indent + 1);
-  console.log('\t'.repeat(indent), node.value);
-  printTreeBin(node.left, indent + 1);
 }
 
 export function eulerTour(node, pre, post, depth = 0, path = []) {
