@@ -209,6 +209,12 @@ def height(node):
     return 1 + max([height(child) for child in node.children])
 
 
+def height_bin(node):
+    if not node or not node.left and not node.right:
+        return 0
+    return 1 + max([height_bin(child) for child in [node.left, node.right]])
+
+
 def bfs(node):
     queue = [node]
     while queue:
@@ -345,7 +351,8 @@ if __name__ == '__main__':
     # print(depth(root_one, 'xx'))  # -1
     # print(depth_bin(bin_root_one, 2))  # 3
     # print(depth_2(find(root_one, 'i')))  # 4
-    print(height(root_one))  # 4
+    # print(height(root_one))  # 4
+    # print(height_bin(bin_root_one))  # 3
 
 
 

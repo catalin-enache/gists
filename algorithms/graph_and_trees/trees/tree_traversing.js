@@ -217,6 +217,11 @@ export function height(node) {
   return 1 + Math.max(...node.children.map(height));
 }
 
+export function heightBin(node) {
+  if (!node || !node.left && !node.right) return 0;
+  return 1 + Math.max(...[node.left, node.right].map(heightBin));
+}
+
 export function subtreeSearchBin(node, value) {
   if (node.value === value) { return node; }
   else if (value < node.value && node.left) { return subtreeSearchBin(node.left, value); }

@@ -8,7 +8,7 @@ import {
   printTree, printTreeBin,
   subtreeSearchBin, findGEBin, findRange, insertBin, deleteBin,
   firstBin,
-  height, inorder, lastBin, lowestCommonAncestor, lowestCommonAncestorBin,
+  height, heightBin, inorder, lastBin, lowestCommonAncestor, lowestCommonAncestorBin,
   Node,
   NodeBin, postorder, postorderBin, postorderIter,
   preorder, preorderBin,
@@ -97,6 +97,7 @@ const rootBin = treeBuilder(binTreeOne, true);
 // console.log(findBinWithPath(rootBin, 8).map((node) => node.value)); // [8, 5, 10]
 // console.log(findBinIterWithPath(rootBin, 8).map((node) => node.value)); // [8, 5, 10]
 // console.log(depthBin(rootBin, 8));
+console.log(heightBin(rootBin));
 // console.log(subtreeSearchBin(rootBin, 4).value); // 3
 // console.log(subtreeSearchBin(rootBin, 6).value); // 8
 // console.log(findGEBin(rootBin, 4).value); // 5
