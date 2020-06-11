@@ -80,19 +80,6 @@ export function find(node, value) {
   return null;
 }
 
-export function findIter(root, value) {
-  const queue = [root];
-  while (queue.length) {
-    const node = queue.shift();
-    if (node.value === value) {
-      return node;
-    }
-    for (let child of node.children) {
-      queue.push(child);
-    }
-  }
-}
-
 export function findWithPath(node, value, path = []) {
   if (node.value === value) {
     path.push(node);
@@ -108,6 +95,37 @@ export function findWithPath(node, value, path = []) {
   return [];
 }
 
+export function findIter(root, value) {
+  // using BFS
+  const queue = [root];
+  while (queue.length) {
+    const node = queue.shift();
+    if (node.value === value) {
+      return node;
+    }
+    for (let child of node.children) {
+      queue.push(child);
+    }
+  }
+}
+
+export function findIterWithPath(root, value) {
+  // using BFS
+  // https://stackoverflow.com/questions/8922060/how-to-trace-the-path-in-a-breadth-first-search
+  const queue = [[root]];
+  while (queue.length) {
+    const path = queue.shift();
+    const node = path[0];
+    if (node.value === value) {
+      return path;
+    }
+    for (let child of node.children) {
+      queue.push([child, ...path]);
+    }
+  }
+  return [];
+}
+
 export function findBin(node, value) {
   if (node === null) return null;
   if (value === node.value) return node;
@@ -116,13 +134,6 @@ export function findBin(node, value) {
   } else {
     return findBin(node.left, value);
   }
-}
-
-export function findBinIter(node, value) {
-  while (node && value !== node.value) {
-    node = value > node.value ? node.right : node.left;
-  }
-  return node;
 }
 
 export function findBinWithPath(node, value, path=[]) {
@@ -140,6 +151,22 @@ export function findBinWithPath(node, value, path=[]) {
     result.length && result.push(node);
     return result;
   }
+}
+
+export function findBinIter(node, value) {
+  while (node && value !== node.value) {
+    node = value > node.value ? node.right : node.left;
+  }
+  return node;
+}
+
+export function findBinIterWithPath(node, value) {
+  const path = [node];
+  while (node && value !== node.value) {
+    node = value > node.value ? node.right : node.left;
+    path.unshift(node);
+  }
+  return node ? path : [];
 }
 
 export function firstBin(node) {

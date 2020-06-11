@@ -70,16 +70,6 @@ def find(node, value):
     return None
 
 
-def find_iter(root, value):
-    queue = [root]
-    while queue:
-        node = queue.pop(0)
-        if node.value == value:
-            return node
-        [queue.append(child) for child in node.children]
-    return None
-
-
 def find_with_path(node, value, path=None):
     path = [] if path is None else path
     if node.value == value:
@@ -93,6 +83,32 @@ def find_with_path(node, value, path=None):
     return []
 
 
+def find_iter(root, value):
+    # using BFS
+    queue = [root]
+    while queue:
+        node = queue.pop(0)
+        if node.value == value:
+            return node
+        for child in node.children:
+            queue.append(child)
+    return None
+
+
+def find_iter_with_path(root, value):
+    # using BFS
+    # https://stackoverflow.com/questions/8922060/how-to-trace-the-path-in-a-breadth-first-search
+    queue = [[root]]
+    while queue:
+        path = queue.pop(0)
+        node = path[0]
+        if node.value == value:
+            return path
+        for child in node.children:
+            queue.append([child] + path)
+    return []
+
+
 def find_bin(node, value):
     if not node:
         return None
@@ -102,15 +118,6 @@ def find_bin(node, value):
         return find_bin(node.right, value)
     else:
         return find_bin(node.left, value)
-
-
-def find_bin_iter(node, value):
-    while node and node.value != value:
-        if value > node.value:
-            node = node.right
-        else:
-            node = node.left
-    return node
 
 
 def find_bin_with_path(node, value, path=None):
@@ -128,6 +135,26 @@ def find_bin_with_path(node, value, path=None):
         result = find_bin_with_path(node.left, value, path)
         len(result) and result.append(node)
         return result
+
+
+def find_bin_iter(node, value):
+    while node and node.value != value:
+        if value > node.value:
+            node = node.right
+        else:
+            node = node.left
+    return node
+
+
+def find_bin_iter_with_path(node, value):
+    path = [node]
+    while node and node.value != value:
+        if value > node.value:
+            node = node.right
+        else:
+            node = node.left
+        path.insert(0, node)
+    return path if node else []
 
 
 def first_bin(node):
@@ -273,8 +300,13 @@ if __name__ == '__main__':
     # print(find_iter(root_one, 'h'))
     # print(find_bin(bin_root_one, 26))
     # print(find_bin_iter(bin_root_one, 26))
+    # print(find_bin_iter(bin_root_one, 99))
+    # print(*map(lambda node: node.value, find_bin_iter_with_path(bin_root_one, 26)))
+    # print(*map(lambda node: node.value, find_bin_iter_with_path(bin_root_one, 99)))
     # print(*map(lambda n: n.value, find_with_path(root_one, 'i')))
+    # print(*map(lambda node: node.value, find_iter_with_path(root_one, 'i')))
     # print(*map(lambda n: n.value, find_bin_with_path(bin_root_one, 10)))
+    # print(*map(lambda n: n.value, find_bin_iter_with_path(bin_root_one, 10)))
 
     # print(first_bin(bin_root_one).value)
     # print(last_bin(bin_root_one).value)
