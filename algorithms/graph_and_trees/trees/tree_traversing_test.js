@@ -3,7 +3,7 @@ import {
   afterBin,
   beforeBin,
   bfs, bfs2, bfsBin, bfsBin2, buildExpressionTree,
-  depth, depth2, eulerTour, evaluateExpressionTree,
+  depth, depthBin, depth2, eulerTour, evaluateExpressionTree,
   find, findWithPath, findIter, findIterWithPath, findBin, findBinIter, findBinWithPath, findBinIterWithPath,
   printTree, printTreeBin,
   subtreeSearchBin, findGEBin, findRange, insertBin, deleteBin,
@@ -96,6 +96,7 @@ const rootBin = treeBuilder(binTreeOne, true);
 // console.log(findBinIter(rootBin, 5).value);
 // console.log(findBinWithPath(rootBin, 8).map((node) => node.value)); // [8, 5, 10]
 // console.log(findBinIterWithPath(rootBin, 8).map((node) => node.value)); // [8, 5, 10]
+// console.log(depthBin(rootBin, 8));
 // console.log(subtreeSearchBin(rootBin, 4).value); // 3
 // console.log(subtreeSearchBin(rootBin, 6).value); // 8
 // console.log(findGEBin(rootBin, 4).value); // 5

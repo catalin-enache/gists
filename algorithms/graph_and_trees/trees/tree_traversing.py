@@ -189,6 +189,20 @@ def after_bin(node):
     return parent
 
 
+def depth(root, node_val):
+    return len(find_with_path(root, node_val)) - 1
+
+
+def depth_bin(root, node_val):
+    return len(find_bin_with_path(root, node_val)) - 1
+
+
+def depth_2(node):
+    if not node.parent:
+        return 0
+    return 1 + depth_2(node.parent)
+
+
 def bfs(node):
     queue = [node]
     while queue:
@@ -319,6 +333,12 @@ if __name__ == '__main__':
     # print(after_bin(find_bin(bin_root_one, 16)))  # 18
     # print(after_bin(find_bin(bin_root_one, 30)))  # None
     # print(after_bin(find_bin(bin_root_one, 14)))  # 16
+
+    # print(depth(root_one, 'i'))  # 4
+    # print(depth(root_one, 'i'))  # 0
+    # print(depth(root_one, 'xx'))  # -1
+    # print(depth_bin(bin_root_one, 2))  # 3
+    # print(depth_2(find(root_one, 'i')))  # 4
 
 
 

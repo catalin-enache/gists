@@ -203,6 +203,10 @@ export function depth(root, nodeVal) {
   return findWithPath(root, nodeVal).length - 1;
 }
 
+export function depthBin(root, nodeVal) {
+  return findBinWithPath(root, nodeVal).length - 1;
+}
+
 export function depth2(node) {
   if (!node.parent) return 0;
   return 1 + depth2(node.parent);
