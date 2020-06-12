@@ -239,6 +239,20 @@ def find_le_bin(node, value):
     return found
 
 
+def find_range(node, start_val, stop_val):
+    """
+    Iterate all (key,value) pairs such that start <= key < stop.
+    If start is None, iteration begins with minimum key of map.
+    If stop is None, iteration continues through the maximum key of map.
+    """
+    walk = first_bin(node) if start_val is None else find_ge_bin(node, start_val)
+    _range = []
+    while walk and (stop_val is None or walk.value < stop_val):
+        _range.append(walk)
+        walk = after_bin(walk)
+    return _range
+
+
 def bfs(node):
     queue = [node]
     while queue:
@@ -378,13 +392,15 @@ if __name__ == '__main__':
     # print(height(root_one))  # 4
     # print(height_bin(bin_root_one))  # 3
 
-    print(subtree_search_bin(bin_root_one, 2).value)  # 2
-    print(subtree_search_bin(bin_root_one, 29).value)  # 30
-    print(subtree_search_bin(bin_root_one, 27).value)  # 26
-    print(find_ge_bin(bin_root_one, 28).value)  # 28
-    print(find_ge_bin(bin_root_one, 27).value)  # 28
-    print(find_le_bin(bin_root_one, 28).value)  # 28
-    print(find_le_bin(bin_root_one, 29).value)  # 28
+    # print(subtree_search_bin(bin_root_one, 2).value)  # 2
+    # print(subtree_search_bin(bin_root_one, 29).value)  # 30
+    # print(subtree_search_bin(bin_root_one, 27).value)  # 26
+    # print(find_ge_bin(bin_root_one, 28).value)  # 28
+    # print(find_ge_bin(bin_root_one, 27).value)  # 28
+    # print(find_le_bin(bin_root_one, 28).value)  # 28
+    # print(find_le_bin(bin_root_one, 29).value)  # 28
+
+    # print(*map(lambda node: node.value, find_range(bin_root_one, 18, 26)))  # 18 20 22 24
 
 
 

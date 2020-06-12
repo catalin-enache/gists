@@ -242,11 +242,7 @@ export function findLEBin(node, value) {
 }
 
 export function findRange(node, startVal, stopVal) {
-  let walk = null;
-  if ([undefined, null].includes(startVal)) { walk = firstBin(node); }
-  else {
-    walk = findGEBin(node, startVal)
-  }
+  let walk = [undefined, null].includes(startVal) ? firstBin(node) : findGEBin(node, startVal);
   const range = [];
   while (walk && ([undefined, null].includes(stopVal) || walk.value < stopVal)) {
     range.push(walk);
