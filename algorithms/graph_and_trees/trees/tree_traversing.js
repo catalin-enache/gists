@@ -235,6 +235,12 @@ export function findGEBin(node, value) {
   return found;
 }
 
+export function findLEBin(node, value) {
+  let found = subtreeSearchBin(node, value);
+  if (found.value > value) found = beforeBin(found);
+  return found;
+}
+
 export function findRange(node, startVal, stopVal) {
   let walk = null;
   if ([undefined, null].includes(startVal)) { walk = firstBin(node); }

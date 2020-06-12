@@ -6,7 +6,7 @@ import {
   depth, depthBin, depth2, eulerTour, evaluateExpressionTree,
   find, findWithPath, findIter, findIterWithPath, findBin, findBinIter, findBinWithPath, findBinIterWithPath,
   printTree, printTreeBin,
-  subtreeSearchBin, findGEBin, findRange, insertBin, deleteBin,
+  subtreeSearchBin, findGEBin, findLEBin, findRange, insertBin, deleteBin,
   firstBin,
   height, heightBin, inorder, lastBin, lowestCommonAncestor, lowestCommonAncestorBin,
   Node,
@@ -68,6 +68,8 @@ const binTreeOne = {
 const root = treeBuilder(treeOne);
 const rootBin = treeBuilder(binTreeOne, true);
 
+// printTree(root);
+// printTreeBin(rootBin);
 
 // console.log(depth(root, 7));
 // console.log(depth2(find(root, 7)));
@@ -89,7 +91,6 @@ const rootBin = treeBuilder(binTreeOne, true);
 //   return [node.value].concat(results).reduce((acc, num) => acc + num);
 // }));
 // console.log(lowestCommonAncestor(root, 6, 7));
-// printTree(root);
 // console.log(root.toString());
 
 // console.log(findBin(rootBin, 5).value);
@@ -97,10 +98,11 @@ const rootBin = treeBuilder(binTreeOne, true);
 // console.log(findBinWithPath(rootBin, 8).map((node) => node.value)); // [8, 5, 10]
 // console.log(findBinIterWithPath(rootBin, 8).map((node) => node.value)); // [8, 5, 10]
 // console.log(depthBin(rootBin, 8));
-console.log(heightBin(rootBin));
+// console.log(heightBin(rootBin));
 // console.log(subtreeSearchBin(rootBin, 4).value); // 3
 // console.log(subtreeSearchBin(rootBin, 6).value); // 8
 // console.log(findGEBin(rootBin, 4).value); // 5
+// console.log(findLEBin(rootBin, 4).value); // 3
 // console.log(findRange(rootBin, 5, 11).map((node) => node.value)); // 5, 8, 10
 // console.log([...bfsBin(rootBin)]);
 // console.log([...bfsBin2(rootBin, false)].map((level) => level.map((n) => n.value)));
@@ -119,5 +121,4 @@ console.log(heightBin(rootBin));
 // console.log(node.parent); // 13
 // deleteBin(rootBin, 10);
 // console.dir(rootBin, { depth: null });
-// printTreeBin(rootBin);
 // console.log(rootBin.toString());

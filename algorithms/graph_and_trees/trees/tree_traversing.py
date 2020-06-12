@@ -215,6 +215,30 @@ def height_bin(node):
     return 1 + max([height_bin(child) for child in [node.left, node.right]])
 
 
+def subtree_search_bin(node, value):
+    if node.value == value:
+        return node
+    if value < node.value and node.left:
+        return subtree_search_bin(node.left, value)
+    elif node.right:
+        return subtree_search_bin(node.right, value)
+    return node
+
+
+def find_ge_bin(node, value):
+    found = subtree_search_bin(node, value)
+    if found.value < value:
+        found = after_bin(found)
+    return found
+
+
+def find_le_bin(node, value):
+    found = subtree_search_bin(node, value)
+    if found.value > value:
+        found = before_bin(found)
+    return found
+
+
 def bfs(node):
     queue = [node]
     while queue:
@@ -320,7 +344,7 @@ if __name__ == '__main__':
     # print('BFS_BIN', list(bfs_bin(bin_root_one)))
 
     # print_tree(root_one)
-    print_tree_bin(bin_root_one)
+    # print_tree_bin(bin_root_one)
 
     # print(find(root_one, 'h'))
     # print(find_iter(root_one, 'h'))
@@ -353,6 +377,14 @@ if __name__ == '__main__':
     # print(depth_2(find(root_one, 'i')))  # 4
     # print(height(root_one))  # 4
     # print(height_bin(bin_root_one))  # 3
+
+    print(subtree_search_bin(bin_root_one, 2).value)  # 2
+    print(subtree_search_bin(bin_root_one, 29).value)  # 30
+    print(subtree_search_bin(bin_root_one, 27).value)  # 26
+    print(find_ge_bin(bin_root_one, 28).value)  # 28
+    print(find_ge_bin(bin_root_one, 27).value)  # 28
+    print(find_le_bin(bin_root_one, 28).value)  # 28
+    print(find_le_bin(bin_root_one, 29).value)  # 28
 
 
 
