@@ -46,7 +46,11 @@ const binTreeOne = {
     },
     right: {
       value: 8,
-      left: {},
+      left: {
+        value: 6,
+        left: {},
+        right: {}
+      },
       right: {}
     }
   },
@@ -119,6 +123,7 @@ const rootBin = treeBuilder(binTreeOne, true);
 // console.log(afterBin(findBin(rootBin, 8)).value);
 // var node = insertBin(rootBin, 14);
 // console.log(node.parent); // 13
-// deleteBin(rootBin, 10);
+// console.log(deleteBin(rootBin, 10));
+// printTreeBin(rootBin);
 // console.dir(rootBin, { depth: null });
 // console.log(rootBin.toString());

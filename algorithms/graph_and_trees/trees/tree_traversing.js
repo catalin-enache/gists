@@ -268,30 +268,55 @@ export function deleteBin(node, value) {
   const found = findBin(node, value);
   if (!found) return;
 
+  // handle one child or no child case
   if (!found.left || !found.right) {
     const onlyChild = found.left || found.right;
     // onlyChild might be null
-    onlyChild && (onlyChild.parent = found.parent);
 
-    if(found.parent.value > found.value) {
-      found.parent.left = onlyChild;
-    } else {
-      found.parent.right = onlyChild;
+    // link only_child with parent
+    if (found.parent) {
+      if (onlyChild) {
+        onlyChild.parent = found.parent;
+      }
+      // if found node is left child of its parent
+      if (found.parent.left === found) {
+        found.parent.left = onlyChild;
+      } else { // found node is right child of its parent
+        found.parent.right = onlyChild;
+      }
     }
 
+    // cut all links
     found.parent = null;
+    found.left = null;
+    found.right = null;
     return found;
   } else { // found.left && found.right
-    const replacement = lastBin(found.left); // the right most child from the left subtree.
+    const prevInorder = lastBin(found.left); // the right most child from the left subtree.
     // it can also be the left most child from the right subtree
-    const replacementValue = replacement.value;
-    replacement.value = found.value;
-    found.value = replacementValue;
-    // we know that replacement has no right child because
-    // replacement is the right most child from the left subtree of found.
-    replacement.parent.right = replacement.left;
-    replacement.parent = null;
-    return replacement;
+    // swap values between found and prev_inorder
+    const prevInorderValue = prevInorder.value;
+    prevInorder.value = found.value;
+    found.value = prevInorderValue;
+    // we know that prevInorder has no right child
+    // because prevInorder is the right most child from the left subtree of found.
+
+    // alternate recursive approach
+    // return deleteBin(prevInorder, prevInorder.value);
+
+    if (prevInorder.parent === found) {
+      // last_bin was the found.left with no right descendants
+      // (prev_inorder is left child of its parent)
+      prevInorder.parent.left = prevInorder.left; // (left subtree or None) // prev_inorder has no right child
+    } else {
+      // prev_inorder is a right child of its whatever parent in the chain
+      prevInorder.parent.right = prevInorder.left; // (left subtree or None) // prev_inorder has no right child
+    }
+
+    // cut all links
+    prevInorder.parent = null;
+    prevInorder.left = null;
+    return prevInorder;
   }
 }
 

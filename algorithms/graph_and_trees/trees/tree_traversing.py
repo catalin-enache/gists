@@ -1,3 +1,5 @@
+from typing import Union
+
 
 class Node:
     __slots__ = 'value', 'children', 'parent'
@@ -21,7 +23,8 @@ class NodeBin:
         self.parent = None
 
     def __repr__(self):
-        return 'Node <{!s}> left: {!r} right: {!r}'.format(self.value, self.left, self.right)
+        return 'Node <{!s}> left: {!r} right: {!r} parent: {!r}'\
+            .format(self.value, self.left, self.right, self.parent and self.parent.value or None)
 
 
 def tree_builder(struct, binary=False, node=None):
@@ -55,9 +58,13 @@ def print_tree(node, indent=0):
 
 
 def print_tree_bin(node, indent=0):
-    node.right and print_tree_bin(node.right, indent + 1)
+    if not node:
+        print('\t' * indent + '*')
+        return
+
+    print_tree_bin(node.right, indent + 1)
     print('\t' * indent + str(node.value))
-    node.left and print_tree_bin(node.left, indent + 1)
+    print_tree_bin(node.left, indent + 1)
 
 
 def find(node, value):
@@ -109,7 +116,7 @@ def find_iter_with_path(root, value):
     return []
 
 
-def find_bin(node, value):
+def find_bin(node: NodeBin, value):
     if not node:
         return None
     if value == node.value:
@@ -253,6 +260,69 @@ def find_range(node, start_val, stop_val):
     return _range
 
 
+def insert_bin(node: NodeBin, value) -> Union[NodeBin, None]:
+    place = subtree_search_bin(node, value)
+    if place.value == value:
+        return
+    new_node = NodeBin(value)
+    if place.value < value:
+        place.right = new_node
+    else:
+        place.left = new_node
+    new_node.parent = place
+    return new_node
+
+
+def delete_bin(node: NodeBin, value) -> Union[NodeBin, None]:
+    found = find_bin(node, value)
+    if not found:
+        return
+    # handle one child or no child case
+    if not found.left or not found.right:
+        only_child = found.left or found.right
+        # only_child might be None !!!
+        # link only_child with parent
+        if found.parent:
+            if only_child:
+                only_child.parent = found.parent
+            # if found node is left child of its parent
+            if found.parent.left is found:
+                found.parent.left = only_child  # might be None
+            # found node is right child of its parent
+            else:
+                found.parent.left = only_child  # might be None
+        # cut all links
+        found.parent = None
+        found.left = None
+        found.right = None
+        return found
+    else:  # found.left and found.right
+        prev_inorder = last_bin(found.left)  # the right most child from the left subtree.
+        # it can also be the left most child from the right subtree
+        # swap values between found and prev_inorder
+        prev_inorder_value = prev_inorder.value
+        prev_inorder.value = found.value
+        found.value = prev_inorder_value
+
+        # we know that prev_inorder has no right child
+        # because prev_inorder is the right most child from the left subtree of found.
+
+        # alternate recursive approach
+        # return delete_bin(prev_inorder, prev_inorder.value)
+
+        if prev_inorder.parent is found:
+            # last_bin was the found.left with no right descendants
+            # (prev_inorder is left child of its parent)
+            prev_inorder.parent.left = prev_inorder.left  # (left subtree or None) // prev_inorder has no right child
+        else:
+            # prev_inorder is a right child of its whatever parent in the chain
+            prev_inorder.parent.right = prev_inorder.left  # (left subtree or None) // prev_inorder has no right child
+        # cut all links
+        prev_inorder.parent = None
+        prev_inorder.left = None
+        return prev_inorder
+
+
 def bfs(node):
     queue = [node]
     while queue:
@@ -314,7 +384,11 @@ bin_tree_one = {
             },
             'right': {
                 'value': 14,
-                'left': {},
+                'left': {
+                    'value': 13,
+                    'left': {},
+                    'right': {}
+                },
                 'right': {}
             }
         }
@@ -402,5 +476,8 @@ if __name__ == '__main__':
 
     # print(*map(lambda node: node.value, find_range(bin_root_one, 18, 26)))  # 18 20 22 24
 
+    # print(insert_bin(bin_root_one, 21).parent.value)  # 22
+    # print(delete_bin(bin_root_one, bin_root_one.value))
+    # print_tree_bin(bin_root_one)
 
 
