@@ -332,6 +332,21 @@ def bfs(node):
             queue.append(child)
 
 
+def bfs_2(node, dir='asc'):
+    result = []
+    queue = [node]
+    while queue:
+        level = []
+        level_length = len(queue)
+        for _ in range(level_length):
+            n = queue.pop(0)
+            level.append(n.value)
+            for child in n.children:
+                queue.append(child)
+        result.insert(len(result) if dir == 'asc' else 0, level)
+    return result
+
+
 def bfs_bin(node):
     queue = [node]
     while queue:
@@ -339,6 +354,21 @@ def bfs_bin(node):
         yield n.value
         n.left and queue.append(n.left)
         n.right and queue.append(n.right)
+
+
+def bfs_bin_2(node, dir='asc'):
+    result = []
+    queue = [node]
+    while queue:
+        level = []
+        level_length = len(queue)
+        for _ in range(level_length):
+            n = queue.pop(0)
+            level.append(n.value)
+            n.left and queue.append(n.left)
+            n.right and queue.append(n.right)
+        result.insert(len(result) if dir == 'asc' else 0, level)
+    return result
 
 
 tree_one = {
@@ -428,8 +458,11 @@ if __name__ == '__main__':
     root_one = tree_builder(tree_one)
     bin_root_one = tree_builder(bin_tree_one, True)
 
-    # print('BFS', list(bfs(root_one)))
-    # print('BFS_BIN', list(bfs_bin(bin_root_one)))
+    print('BFS', list(bfs(root_one)))
+    print('BFS', list(bfs_2(root_one)))
+    print('BFS_BIN', list(bfs_bin(bin_root_one)))
+    print('BFS_BIN', list(bfs_bin_2(bin_root_one)))
+
 
     # print_tree(root_one)
     # print_tree_bin(bin_root_one)
