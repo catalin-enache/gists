@@ -371,6 +371,38 @@ def bfs_bin_2(node, dir='asc'):
     return result
 
 
+def preorder(node):
+    yield node.value
+    for child in node.children:
+        yield from preorder(child)
+
+
+def preorder_iter(node):
+    stack = [node]
+    while stack:
+        n = stack.pop()
+        yield n.value
+        for i in range(len(n.children) - 1, -1, -1):
+            stack.append(n.children[i])
+
+
+def preorder_bin(node):
+    if not node:
+        return
+    yield node.value
+    for child in [node.left, node.right]:
+        yield from preorder_bin(child)
+
+
+def preorder_bin_iter(node):
+    stack = [node]
+    while stack:
+        n = stack.pop()
+        yield n.value
+        n.right and stack.append(n.right)
+        n.left and stack.append(n.left)
+
+
 tree_one = {
     'value': 'a', 'children': [
         {'value': 'b', 'children': [
@@ -458,11 +490,10 @@ if __name__ == '__main__':
     root_one = tree_builder(tree_one)
     bin_root_one = tree_builder(bin_tree_one, True)
 
-    print('BFS', list(bfs(root_one)))
-    print('BFS', list(bfs_2(root_one)))
-    print('BFS_BIN', list(bfs_bin(bin_root_one)))
-    print('BFS_BIN', list(bfs_bin_2(bin_root_one)))
-
+    # print('BFS', list(bfs(root_one)))
+    # print('BFS', list(bfs_2(root_one)))
+    # print('BFS_BIN', list(bfs_bin(bin_root_one)))
+    # print('BFS_BIN', list(bfs_bin_2(bin_root_one)))
 
     # print_tree(root_one)
     # print_tree_bin(bin_root_one)
@@ -513,4 +544,8 @@ if __name__ == '__main__':
     # print(delete_bin(bin_root_one, bin_root_one.value))
     # print_tree_bin(bin_root_one)
 
+    # print(*preorder(root_one))
+    # print(*preorder_iter(root_one))
+    # print(*preorder_bin(bin_root_one))
+    # print(*preorder_bin_iter(bin_root_one))
 

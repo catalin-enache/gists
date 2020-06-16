@@ -11,8 +11,7 @@ import {
   height, heightBin, inorder, lastBin, lowestCommonAncestor, lowestCommonAncestorBin,
   Node,
   NodeBin, postorder, postorderBin, postorderIter,
-  preorder, preorderBin,
-  preorderIter
+  preorder, preorderIter, preorderBin, preorderBinIter
 } from "./tree_traversing.js";
 
 const treeOne = {
@@ -111,6 +110,7 @@ const rootBin = treeBuilder(binTreeOne, true);
 // console.log([...bfsBin(rootBin)]);
 // console.log([...bfsBin2(rootBin, false)].map((level) => level.map((n) => n.value)));
 // console.log([...preorderBin(rootBin)]);
+// console.log([...preorderBinIter(rootBin)]);
 // console.log([...postorderBin(rootBin)]);
 // console.log([...inorder(rootBin)]);
 // console.log(lowestCommonAncestorBin(rootBin, 3, 13).value);

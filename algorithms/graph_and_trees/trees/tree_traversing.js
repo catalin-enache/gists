@@ -401,6 +401,16 @@ export function *preorderBin(node) {
   yield *preorderBin(node.right);
 }
 
+export function *preorderBinIter(node) {
+  const stack = [node];
+  while (stack.length) {
+    const n = stack.pop();
+    yield n.value;
+    n.right && stack.push(n.right);
+    n.left && stack.push(n.left);
+  }
+}
+
 export function *postorder(node) {
   for (let child of node.children) {
     yield *postorder(child);
