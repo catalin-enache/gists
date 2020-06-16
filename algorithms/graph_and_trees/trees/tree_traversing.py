@@ -10,7 +10,8 @@ class Node:
         self.parent = None
 
     def __repr__(self):
-        return 'Node <{!s}> {!r}'.format(self.value, self.children)
+        # return 'Node <{!s}> {!r}'.format(self.value, self.children)
+        return 'Node <{!s}>'.format(self.value)
 
 
 class NodeBin:
@@ -403,6 +404,26 @@ def preorder_bin_iter(node):
         n.left and stack.append(n.left)
 
 
+def postorder(node):
+    for child in node.children:
+        yield from postorder(child)
+    yield node.value
+
+
+def postorder_iter(node):
+    stack_1 = [node]
+    stack_2 = []
+    while stack_1:
+        print(*map(lambda n: n.value, stack_1))
+        n = stack_1.pop()
+        stack_2.append(n.value)
+        for i in range(len(n.children)):
+            stack_1.append(n.children[i])
+    while stack_2:
+        yield stack_2.pop()
+
+
+
 tree_one = {
     'value': 'a', 'children': [
         {'value': 'b', 'children': [
@@ -548,4 +569,6 @@ if __name__ == '__main__':
     # print(*preorder_iter(root_one))
     # print(*preorder_bin(bin_root_one))
     # print(*preorder_bin_iter(bin_root_one))
+    # print(*postorder(root_one))
+    # print(*postorder_iter(root_one))
 
