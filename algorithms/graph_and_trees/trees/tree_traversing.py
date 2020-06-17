@@ -414,7 +414,6 @@ def postorder_iter(node):
     stack_1 = [node]
     stack_2 = []
     while stack_1:
-        print(*map(lambda n: n.value, stack_1))
         n = stack_1.pop()
         stack_2.append(n.value)
         for i in range(len(n.children)):
@@ -422,6 +421,33 @@ def postorder_iter(node):
     while stack_2:
         yield stack_2.pop()
 
+
+def postorder_bin(node):
+    if node is None:
+        return
+    yield from postorder_bin(node.left)
+    yield from postorder_bin(node.right)
+    yield node.value
+
+
+def postorder_bin_iter(node):
+    stack_1 = [node]
+    stack_2 = []
+    while stack_1:
+        n = stack_1.pop()
+        stack_2.append(n.value)
+        n.left and stack_1.append(n.left)
+        n.right and stack_1.append(n.right)
+    while stack_2:
+        yield stack_2.pop()
+
+
+def inorder(node):
+    if node is None:
+        return
+    yield from inorder(node.left)
+    yield node.value
+    yield from inorder(node.right)
 
 
 tree_one = {
@@ -571,4 +597,7 @@ if __name__ == '__main__':
     # print(*preorder_bin_iter(bin_root_one))
     # print(*postorder(root_one))
     # print(*postorder_iter(root_one))
+    # print(*postorder_bin(bin_root_one))
+    # print(*postorder_bin_iter(bin_root_one))
+    # print(*inorder(bin_root_one))
 

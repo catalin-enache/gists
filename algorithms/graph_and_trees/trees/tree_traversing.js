@@ -442,6 +442,18 @@ export function *postorderBin(node) {
   yield node.value;
 }
 
+export function *postorderBinIter(node) {
+  const stack = [node];
+  const stack2 = [];
+  while (stack.length) {
+    const n = stack.pop();
+    stack2.push(n);
+    n.left && stack.push(n.left);
+    n.right && stack.push(n.right);
+  }
+  while (stack2.length) yield stack2.pop().value;
+}
+
 export function *inorder(node) {
   if (!node) return;
   yield *inorder(node.left);

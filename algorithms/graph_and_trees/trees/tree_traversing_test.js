@@ -10,7 +10,7 @@ import {
   firstBin,
   height, heightBin, inorder, lastBin, lowestCommonAncestor, lowestCommonAncestorBin,
   Node,
-  NodeBin, postorder, postorderBin, postorderIter,
+  NodeBin, postorder, postorderBin, postorderIter, postorderBinIter,
   preorder, preorderIter, preorderBin, preorderBinIter
 } from "./tree_traversing.js";
 
@@ -112,6 +112,7 @@ const rootBin = treeBuilder(binTreeOne, true);
 // console.log([...preorderBin(rootBin)]);
 // console.log([...preorderBinIter(rootBin)]);
 // console.log([...postorderBin(rootBin)]);
+// console.log([...postorderBinIter(rootBin)]);
 // console.log([...inorder(rootBin)]);
 // console.log(lowestCommonAncestorBin(rootBin, 3, 13).value);
 // console.log(evaluateExpressionTree(buildExpressionTree('(((3+1)*4)/((9-3)+2))')));
