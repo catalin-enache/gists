@@ -1,3 +1,4 @@
+import functools
 from typing import Union
 
 
@@ -450,6 +451,13 @@ def inorder(node):
     yield from inorder(node.right)
 
 
+def euler_tour(node, pre, post, depth=0, path=None):
+    path = path if path is not None else []
+    pre(node, depth, path)
+    results = [euler_tour(child, pre, post, depth + 1, [*path, node]) for child in node.children]
+    return post(node, depth, path, results)
+
+
 tree_one = {
     'value': 'a', 'children': [
         {'value': 'b', 'children': [
@@ -600,4 +608,10 @@ if __name__ == '__main__':
     # print(*postorder_bin(bin_root_one))
     # print(*postorder_bin_iter(bin_root_one))
     # print(*inorder(bin_root_one))
+
+    # def pre(node, depth, path):
+    #     print('pre', node.value, ' => ', ', '.join([str(node.value) for node in path]))
+    # def post(node, depth, path, results):
+    #     return functools.reduce(lambda acc, node_val: str(acc) + str(node_val), [node.value, *results], '')
+    # print(euler_tour(root_one, pre, post))
 
