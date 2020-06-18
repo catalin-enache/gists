@@ -8,7 +8,7 @@ import {
   printTree, printTreeBin,
   subtreeSearchBin, findGEBin, findLEBin, findRange, insertBin, deleteBin,
   firstBin,
-  height, heightBin, inorder, lastBin, lowestCommonAncestor, lowestCommonAncestorBin,
+  height, heightBin, inorder, lastBin, lca, lcaBin,
   Node,
   NodeBin, postorder, postorderBin, postorderIter, postorderBinIter,
   preorder, preorderIter, preorderBin, preorderBinIter
@@ -93,7 +93,7 @@ const rootBin = treeBuilder(binTreeOne, true);
 // }, (node, depth, path, results) => {
 //   return [node.value].concat(results).reduce((acc, num) => acc + num);
 // }));
-// console.log(lowestCommonAncestor(root, 6, 7));
+// console.log(lca(root, 2, 5).value); // 2
 // console.log(root.toString());
 
 // console.log(findBin(rootBin, 5).value);
@@ -114,7 +114,7 @@ const rootBin = treeBuilder(binTreeOne, true);
 // console.log([...postorderBin(rootBin)]);
 // console.log([...postorderBinIter(rootBin)]);
 // console.log([...inorder(rootBin)]);
-// console.log(lowestCommonAncestorBin(rootBin, 3, 13).value);
+// console.log(lcaBin(rootBin, 3, 5).value);
 // console.log(evaluateExpressionTree(buildExpressionTree('(((3+1)*4)/((9-3)+2))')));
 // console.log(firstBin(rootBin).value);
 // console.log(lastBin(rootBin).value);

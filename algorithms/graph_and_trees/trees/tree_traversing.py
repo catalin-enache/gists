@@ -458,6 +458,38 @@ def euler_tour(node, pre, post, depth=0, path=None):
     return post(node, depth, path, results)
 
 
+# lowest common ancestor
+def lca(node, a, b):
+    path_1 = find_with_path(node, a)
+    path_2 = find_with_path(node, b)
+    if not path_1 or not path_2:
+        return
+    path_1_index = len(path_1) - 1
+    path_2_index = len(path_2) - 1
+    while path_1_index >= -1 and path_2_index >= -1:
+        if path_1[path_1_index] != path_2[path_2_index]:
+            path_1_index += 1
+            path_2_index += 1
+            break
+        path_1_index -= 1
+        path_2_index -= 1
+    # can also be path_2[path_2_index].value
+    return find_with_path(node, path_1[path_1_index].value)[0]
+
+
+# lowest common ancestor bin
+def lca_bin(node, a, b):
+    if not node:
+        return
+    if a == b:
+        return find_bin(node, a)
+    if a < node.value and b < node.value:
+        return lca_bin(node.left, a, b)
+    if a > node.value and b > node.value:
+        return lca_bin(node.right, a, b)
+    return node if find_bin(node, a) and find_bin(node, b) else None
+
+
 tree_one = {
     'value': 'a', 'children': [
         {'value': 'b', 'children': [
@@ -614,4 +646,7 @@ if __name__ == '__main__':
     # def post(node, depth, path, results):
     #     return functools.reduce(lambda acc, node_val: str(acc) + str(node_val), [node.value, *results], '')
     # print(euler_tour(root_one, pre, post))
+
+    # print(lca(root_one, 'h', 'i'))
+    # print(lca_bin(bin_root_one, 20, 18))
 

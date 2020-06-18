@@ -467,13 +467,13 @@ export function eulerTour(node, pre, post, depth = 0, path = []) {
   return post(node, depth, path, results);
 }
 
-export function lowestCommonAncestor(node, a, b) {
+export function lca(node, a, b) {
   const path1 = findWithPath(node, a);
   const path2 = findWithPath(node, b);
   if (!path1.length || !path2.length) return null;
   let path1Idx = path1.length - 1;
   let path2Idx = path2.length - 1;
-  while (path1Idx >= 0 && path2Idx >= 0) {
+  while (path1Idx >= -1 && path2Idx >= -1) {
     if (path1[path1Idx] !== path2[path2Idx]) {
       path1Idx++;
       path2Idx++;
@@ -486,15 +486,15 @@ export function lowestCommonAncestor(node, a, b) {
   return findWithPath(node, path1[path1Idx].value)[0];
 }
 
-export function lowestCommonAncestorBin(node, a, b) {
-  if (node === null) return null;
-  if (node.value === a || node.value === b) return node;
-  const left = lowestCommonAncestorBin(node.left, a, b);
-  const right = lowestCommonAncestorBin(node.right, a, b);
-  if (left && right) return node;
-  if (left) return left;
-  return right;
+// lowest common ancestor bin
+export function lcaBin(node, a, b) {
+  if (!node) return null;
+  if (a === b) return findBin(node, a);
+  if (a < node.value && b < node.value) return lcaBin(node.left, a, b);
+  if (a > node.value && b > node.value) return lcaBin(node.right, a, b);
+  return findBin(node, a) && findBin(node, b) ? node : null;
 }
+
 
 export function buildExpressionTree(str) {
   const num = /\d/;
