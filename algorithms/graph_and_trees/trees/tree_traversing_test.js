@@ -3,7 +3,7 @@ import {
   afterBin,
   beforeBin,
   bfs, bfs2, bfsBin, bfsBin2, buildExpressionTree,
-  depth, depthBin, depth2, eulerTour, evaluateExpressionTree,
+  depth, depthBin, depth2, eulerTour, eulerTourBin, evaluateExpressionTree,
   find, findWithPath, findIter, findIterWithPath, findBin, findBinIter, findBinWithPath, findBinIterWithPath,
   printTree, printTreeBin,
   subtreeSearchBin, findGEBin, findLEBin, findRange, insertBin, deleteBin,
@@ -114,6 +114,12 @@ const rootBin = treeBuilder(binTreeOne, true);
 // console.log([...postorderBin(rootBin)]);
 // console.log([...postorderBinIter(rootBin)]);
 // console.log([...inorder(rootBin)]);
+// console.log(eulerTourBin(rootBin, (node, depth, path) => {
+//   // console.log('    '.repeat(depth), node.value);
+//   console.log('pre', node.value, ' => ', path.map((node) => node.value).join(', '));
+// }, (node, depth, path, results) => {
+//   return [node.value].concat(results).reduce((acc, num) => acc + (num || 0));
+// }, () => {})); // 80 sum of all node values
 // console.log(lcaBin(rootBin, 3, 5).value);
 // console.log(evaluateExpressionTree(buildExpressionTree('(((3+1)*4)/((9-3)+2))')));
 // console.log(firstBin(rootBin).value);

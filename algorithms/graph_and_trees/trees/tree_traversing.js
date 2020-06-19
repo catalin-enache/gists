@@ -467,6 +467,20 @@ export function eulerTour(node, pre, post, depth = 0, path = []) {
   return post(node, depth, path, results);
 }
 
+export function eulerTourBin(node, pre, post, invisit, depth = 0, path = []) {
+  pre(node, depth, path);
+  const results = [null, null];
+  if (node.left) {
+    results[0] = eulerTourBin(node.left, pre, post, invisit, depth + 1, [...path, node]);
+  }
+  invisit(node, depth, path);
+  if (node.right) {
+    results[1] = eulerTourBin(node.right, pre, post, invisit, depth + 1, [...path, node]);
+  }
+  const answer = post(node, depth, path, results);
+  return answer
+}
+
 export function lca(node, a, b) {
   const path1 = findWithPath(node, a);
   const path2 = findWithPath(node, b);

@@ -53,10 +53,14 @@ def tree_builder(struct, binary=False, node=None):
             tree_builder(obj, binary, child)
 
 
-def print_tree(node, indent=0):
-    print('\t' * indent + str(node.value))
+def print_tree(node, path=None, indent=0):
+    label = '' if path is None else '.'.join(str(i) for i in path) + ': '
+    print('\t' * indent + label + str(node.value))
+    path is not None and path.append(0)
     for child in node.children:
-        print_tree(child, indent + 1)
+        print_tree(child, path, indent + 1)
+        if path is not None: path[-1] += 1
+    path is not None and path.pop()
 
 
 def print_tree_bin(node, indent=0):
@@ -458,6 +462,19 @@ def euler_tour(node, pre, post, depth=0, path=None):
     return post(node, depth, path, results)
 
 
+def euler_tour_bin(node, pre, post, invisit, depth=0, path=None):
+    path = path if path is not None else []
+    pre(node, depth, path)
+    results = [None, None]
+    if node.left:
+        results[0] = euler_tour_bin(node.left, pre, post, invisit, depth + 1, [*path, node])
+    invisit(node, depth, path)
+    if node.right:
+        results[1] = euler_tour_bin(node.right, pre, post, invisit, depth + 1, [*path, node])
+    answer = post(node, depth, path, results)
+    return answer
+
+
 # lowest common ancestor
 def lca(node, a, b):
     path_1 = find_with_path(node, a)
@@ -582,7 +599,7 @@ if __name__ == '__main__':
     # print('BFS_BIN', list(bfs_bin(bin_root_one)))
     # print('BFS_BIN', list(bfs_bin_2(bin_root_one)))
 
-    # print_tree(root_one)
+    # print_tree(root_one, [])
     # print_tree_bin(bin_root_one)
 
     # print(find(root_one, 'h'))
@@ -646,6 +663,18 @@ if __name__ == '__main__':
     # def post(node, depth, path, results):
     #     return functools.reduce(lambda acc, node_val: str(acc) + str(node_val), [node.value, *results], '')
     # print(euler_tour(root_one, pre, post))
+
+    # def pre(node, depth, path):
+    #     print('pre', node.value, ' => ', ', '.join([str(node.value) for node in path]))
+    # def invisit(node, depth, path):
+    #     pass
+    #     # x, y coords for drawing
+    #     # node.x = self._count
+    #     # node.y = depth
+    #     # self._count += 1
+    # def post(node, depth, path, results):
+    #     return node.value + (results[0] or 0) + (results[1] or 0)
+    # print(euler_tour_bin(bin_root_one, pre, post, invisit))  # 253 (sum of all values)
 
     # print(lca(root_one, 'h', 'i'))
     # print(lca_bin(bin_root_one, 20, 18))
