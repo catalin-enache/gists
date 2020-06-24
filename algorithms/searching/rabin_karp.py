@@ -31,57 +31,58 @@ def mod(a, b):
     return c + b if c < 0 else c
 """
 
-d = 256  # the base
-q = 101  # A prime number
+base = 256  # the base
+prime = 101  # A prime number
 
 
 def rabin_karp_search(txt, pat):
-    M = len(pat)
-    N = len(txt)
+    pat_length = len(pat)
+    txt_length = len(txt)
     i = 0
     j = 0
-    p = 0  # hash value for pattern
-    t = 0  # hash value for txt
-    h = 1
+    p_hash = 0  # hash value for pattern
+    t_hash = 0  # hash value for txt
+    lead_digit = 1
 
-    # The value of h would be "pow(d, M-1)%q"
-    for i in range(M - 1):
-        h = (h * d) % q
+    # The value of lead_digit would be "pow(base, pat_length-1)%prime"
+    for i in range(pat_length - 1):
+        lead_digit = (lead_digit * base) % prime
 
     # Calculate the hash value of pattern and first window
     # of text
-    for i in range(M):
-        p = (d * p + ord(pat[i])) % q
-        t = (d * t + ord(txt[i])) % q
+    for i in range(pat_length):
+        p_hash = (base * p_hash + ord(pat[i])) % prime
+        t_hash = (base * t_hash + ord(txt[i])) % prime
 
     # Slide the pattern over text one by one
-    for i in range(N - M + 1):
+    for i in range(txt_length - pat_length + 1):
         # Check the hash values of current window of text and
         # pattern if the hash values match then only check
         # for characters on by one
-        if p == t:
+        if p_hash == t_hash:
             # Check for characters one by one
-            for j in range(M):
+            for j in range(pat_length):
                 if txt[i + j] != pat[j]:
                     break
 
-            # if p == t and pat[0...M-1] = txt[i, i+1, ...i+M-1]
-            if j == M - 1:
+            # if p_hash == t_hash and pat[0...pat_length-1] = txt[i, i+1, ...i+pat_length-1]
+            if j == pat_length - 1:
                 return i
 
         # if end reached without any match
-        if i == N - M:
+        if i == txt_length - pat_length:
             return - 1
 
         # Calculate hash value for next window of text: Remove
         # leading digit, add trailing digit
-        t = (d * (t - ord(txt[i]) * h) + ord(txt[i + M])) % q
+        # 234 to 345 => (234 – 2*100)*10 + 5
+        t_hash = (((t_hash - ord(txt[i]) * lead_digit) * base) + ord(txt[i + pat_length])) % prime
 
-        # We might get negative values of t, converting it to
+        # We might get negative values of t_hash, converting it to
         # positive
         # https://torstencurdt.com/tech/posts/modulo-of-negative-numbers/
-        if t < 0:
-            t = t + q
+        if t_hash < 0:
+            t_hash = t_hash + prime
 
 
 print(rabin_karp_search('ABCCDAAEFGCDD', 'CDD'))

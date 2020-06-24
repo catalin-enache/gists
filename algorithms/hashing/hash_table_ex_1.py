@@ -1,18 +1,42 @@
 
+import random
 import functools
 import pprint
 pp = pprint.PrettyPrinter()
 
+# http://www.mathcs.emory.edu/~cheung/Courses/323/Syllabus/Map/hash-func.html
+# https://www.cpp.edu/~ftang/courses/CS240/lectures/hashing.htm
+# https://brilliant.org/wiki/modular-arithmetic/
+
+
+def polynomial_hash(key, length):
+    prime = 37  # 33, 37, 39, 41
+    # return functools.reduce(lambda acc, item: (acc + prime * acc + ord(item)) % length, iter(str(key)), 0)
+    return functools.reduce(lambda acc, item: (prime * acc + ord(item)) % length, iter(str(key)), 0)
+
+
+def cyclic_shift_hash(key, length):
+    prime = 109345121
+    scale = 1 + random.randrange(prime - 1)  # scale from 1 to p-1 for MAD
+    shift = random.randrange(prime - 1)  # shift from 0 to p-1 for MAD
+    mask = (1 << 32) - 1
+    hsh = 0
+    for char in key:
+        hsh = (hsh << 5 & mask) | (hsh >> 27)
+        hsh += ord(char)
+    # compress using MAD (Multiply Add Divide)
+    compressed = (hsh * scale + shift) % prime % length
+    return compressed
+
 
 class HashTableSeparateChaining(object):
-
-    H = 37
 
     def __init__(self, length=137):
         self.table = [[] for _ in range(length)]
 
     def hash(self, key):
-        return functools.reduce(lambda acc, item: acc + self.H * acc + ord(item), iter(str(key)), 0) % len(self.table)
+        return cyclic_shift_hash(key, len(self.table))
+        # return polynomial_hash(key, len(self.table))
 
     def put(self, key, data):
         _hash = self.hash(key)
@@ -49,7 +73,5 @@ hTable = HashTableSeparateChaining(11)
 # pp.pprint(hTable.table)
 distribution_length = hTable.show_distribution()
 print('data_length', len(data), 'distribution_length', distribution_length)
-
-
 
 
