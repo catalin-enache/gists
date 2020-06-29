@@ -119,6 +119,28 @@ def transpose_2(matrix):
     return result
 
 
+# works for non square matrix
+def transpose_top_right(matrix):
+    rows_num, cols_num = len(matrix), len(matrix[0])
+    res_cols_num, res_rows_num = len(matrix), len(matrix[0])
+    result = [[0] * res_cols_num for _ in range(res_rows_num)]
+    for row_i in range(rows_num):
+        for col_i in range(cols_num):
+            result[col_i][row_i] = matrix[row_i][col_i]
+    return result
+
+
+# works for non square matrix
+def transpose_top_left(matrix):
+    rows_num, cols_num = len(matrix), len(matrix[0])
+    res_cols_num, res_rows_num = len(matrix), len(matrix[0])
+    result = [[0] * res_cols_num for _ in range(res_rows_num)]
+    for row_i in range(rows_num):
+        for col_i in range(cols_num):
+            result[res_rows_num - col_i - 1][res_cols_num - row_i - 1] = matrix[row_i][col_i]
+    return result
+
+
 magic_squares = [
     MAGIC_SQUARE,
     rotate_90(MAGIC_SQUARE),
