@@ -183,6 +183,27 @@ function rebalanceBin(node) {
   }
 }
 
+function splay(node) {
+  // to be called at insert, delete, access node
+  while (node.parent) { //  while p is not root
+    const parent = node.parent;
+    const grand = parent.parent;
+
+    if (!grand) {
+      // zig case
+      rotateBin(node);
+    } else if ((parent === grand.left) === (node === parent.left)) {
+      // zig-zig case
+      rotateBin(parent);
+      rotateBin(node);
+    } else {
+      // zig-zag case
+      rotateBin(node);
+      rotateBin(node);
+    }
+  }
+}
+
 export function treeBuilder(struct, binary = false, node= null) {
   if (!node) {
     node = binary ? new NodeBin(struct.value) : new Node(struct.value);

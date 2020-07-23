@@ -171,6 +171,25 @@ def rebalance_bin(node):
             node = node.parent  # repeat with parent
 
 
+def splay(node):
+    # to be called at insert, delete, access node
+    while node.parent:  # while p is not root
+        parent = node.parent
+        grand = parent.parent
+
+        if grand is None:
+            # zig case
+            rotate_bin(node)
+        elif (parent == grand.left) == (node == parent.left):
+            # zig-zig case
+            rotate_bin(parent)
+            rotate_bin(node)
+        else:
+            # zig-zag case
+            rotate_bin(node)
+            rotate_bin(node)
+
+
 def tree_builder(struct, binary=False, node=None):
     if node is None:
         node = NodeBin(struct['value']) if binary else Node(struct['value'])
