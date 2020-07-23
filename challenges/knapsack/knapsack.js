@@ -16,6 +16,15 @@ function knapsackRec(values, weights, totalWeight, n) {
   return max;
 }
 
+function printTable(arr2d) {
+  const res = [];
+  for (const row of arr2d) {
+    const rowStr = row.map((el) => ('' + el).padStart(4, ' ')).join('  ');
+    res.push(rowStr);
+  }
+  return res.join('\n');
+}
+
 // https://www.youtube.com/watch?v=nLmhmB6NzcM
 // https://www.techiedelight.com/0-1-knapsack-problem/
 function knapsackDP(values, weights, totalWeight) {
@@ -47,7 +56,7 @@ function knapsackDP(values, weights, totalWeight) {
     }
   }
 
-  console.log(table);
+  console.log(printTable(table));
 
   const maxVal = table[values.length][totalWeight];
 

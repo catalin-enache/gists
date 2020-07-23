@@ -71,8 +71,8 @@ const binTreeOne = {
 const root = treeBuilder(treeOne);
 const rootBin = treeBuilder(binTreeOne, true);
 
-// printTree(root);
-// printTreeBin(rootBin);
+// printTree(root, [], true);
+printTreeBin(rootBin, true);
 
 // console.log(depth(root, 7));
 // console.log(depth2(find(root, 7)));

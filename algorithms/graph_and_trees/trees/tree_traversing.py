@@ -3,12 +3,13 @@ from typing import Union
 
 
 class Node:
-    __slots__ = 'value', 'children', 'parent'
+    __slots__ = 'value', 'children', 'parent', 'height'
 
     def __init__(self, value):
         self.value = value
         self.children = []
         self.parent = None
+        self.height = 0
 
     def __repr__(self):
         # return 'Node <{!s}> {!r}'.format(self.value, self.children)
@@ -16,23 +17,165 @@ class Node:
 
 
 class NodeBin:
-    __slots__ = 'value', 'left', 'right', 'parent'
+    __slots__ = 'value', 'left', 'right', 'parent', 'height'
 
     def __init__(self, value):
         self.value = value
         self.left = None
         self.right = None
         self.parent = None
+        self.height = 0
+
+    def left_height(self):
+        return self.left.height if self.left else 0
+
+    def right_height(self):
+        return self.right.height if self.right else 0
 
     def __repr__(self):
         return 'Node <{!s}> left: {!r} right: {!r} parent: {!r}'\
             .format(self.value, self.left, self.right, self.parent and self.parent.value or None)
 
 
+def is_binary(node):
+    return hasattr(node, 'left')
+
+
+def recompute_height(node):
+    binary = is_binary(node)
+    children = node.children if not binary else []
+    if binary and node.left:
+        children.append(node.left)
+    if binary and node.right:
+        children.append(node.right)
+    node.height = 1 + (max(child.height for child in children) if children else 0)
+    # having height >= 1 is crux for working with tall_grandchild_bin
+    # which uses 'favoring' when subtrees have equal height
+
+
+def recompute_tree_height(root):
+    _dfs = postorder_bin if is_binary(root) else postorder
+    for node in _dfs(root, yield_value=False):
+        recompute_height(node)
+
+
+def is_balanced(node):
+    return abs(node.left_height() - node.right_height()) <= 1
+
+
+# This function is only called from within tall_grandchild_bin.
+# If children have equal height, chooses the left child if the input node is a left child,
+# or the right child if the input node is the right child.
+def tall_child_bin(node):
+    if node.left_height() > node.right_height():
+        return node.left
+    elif node.right_height() > node.left_height():
+        return node.right
+    else:  # left an right have equal height
+        # it is assumed that when left and right children have equal heights
+        # node has a parent
+        return node.left if node == node.parent.left else node.right
+
+
+def tall_grandchild_bin(node):
+    # when this function is called it is known that
+    # node has grandchildren and is not balanced
+    return tall_child_bin(tall_child_bin(node))
+
+
+def relink_bin(parent, child, make_left_child=False):
+    """Relink parent node with child node (we allow child to be None)."""
+    if make_left_child:
+        parent.left = child
+    else:
+        parent.right = child
+    if child is not None:
+        child.parent = parent
+
+
+def rotate_bin(node):
+    """Rotate node above its parent | swaps node with its parent"""
+    x = node
+    y = node.parent
+    z = y.parent  # grandparent z might be None
+    if z is None:
+        x.parent = None  # x becomes root
+    else:
+        relink_bin(z, x, y == z.left)  # x becomes a direct child of z
+    if x == y.left:
+        relink_bin(y, x.right, make_left_child=True)  # x.right becomes left child of y
+        relink_bin(x, y, make_left_child=False)  # y becomes right child of x
+    else:
+        relink_bin(y, x.left, make_left_child=False)  # x.left becomes right child of y
+        relink_bin(x, y, make_left_child=True)  # y becomes left child of x
+
+
+def restructure_bin(x):
+    """Perform trinode restructure of node x with parent/grandparent"""
+    y = x.parent
+    z = y.parent
+    if (x == y.right) == (y == z.right):  # matching alignments
+        rotate_bin(y)  # single rotation (of y)
+        return y  # y is new subtree root
+    else:  # opposite alignments
+        rotate_bin(x)  # double rotation (of x)
+        rotate_bin(x)
+        return x  # x is new subtree root
+
+
+def restructure_bin_2(x):
+    y = x.parent
+    z = y.parent
+    if z.value < x.value < y.value:  # RL
+        a, b, c = z, x, y
+    elif z.value > x.value > y.value:  # LR
+        a, b, c = y, x, z
+    elif z.value < y.value < x.value:  # RR
+        a, b, c = z, y, x
+    elif z.value > y.value > x.value:  # LL
+        a, b, c = x, y, z
+
+    if not z.parent:
+        b.parent = None  # b becomes new root
+    else:
+        relink_bin(z.parent, b, z.parent.left == z)
+
+    if b.left not in (x, y, z):
+        relink_bin(a, b.left, make_left_child=False)
+    if b.right not in (x, y, z):
+        relink_bin(c, b.right, make_left_child=True)
+
+    relink_bin(b, a, make_left_child=True)
+    relink_bin(b, c, make_left_child=False)
+
+    return b
+
+
+def rebalance_bin(node):
+    while node:  # traverse up the tree, checking for imbalance
+        old_height = node.height  # trivially 0 if new node
+        if not is_balanced(node):
+            # perform trinode restructuring, setting p to resulting root,
+            # and recompute new local heights after the restructuring
+            node = restructure_bin(tall_grandchild_bin(node))
+            # node = restructure_bin_2(tall_grandchild_bin(node))
+            recompute_height(node.left)
+            recompute_height(node.right)
+            # rebalancing after insert only requires one trinode rotation
+            # but rebalancing after delete might require more trinode rotations
+        recompute_height(node)  # adjust for recent changes
+        if old_height == node.height:  # has height changed?
+            node = None  # no further changes needed
+            # old and new heights being equal happen when rebalancing once after an insert
+        else:
+            node = node.parent  # repeat with parent
+
+
 def tree_builder(struct, binary=False, node=None):
     if node is None:
         node = NodeBin(struct['value']) if binary else Node(struct['value'])
         tree_builder(struct, binary, node)
+        recompute_tree_height(node)
         return node
     if binary:
         if struct['left']:
@@ -53,24 +196,24 @@ def tree_builder(struct, binary=False, node=None):
             tree_builder(obj, binary, child)
 
 
-def print_tree(node, path=None, indent=0):
+def print_tree(node, path=None, print_height=False, indent=0):
     label = '' if path is None else '.'.join(str(i) for i in path) + ': '
-    print('\t' * indent + label + str(node.value))
+    print('\t' * indent + label + str(node.value) + ('(' + str(node.height) + ')' if print_height else ''))
     path is not None and path.append(0)
     for child in node.children:
-        print_tree(child, path, indent + 1)
+        print_tree(child, path, print_height, indent + 1)
         if path is not None: path[-1] += 1
     path is not None and path.pop()
 
 
-def print_tree_bin(node, indent=0):
+def print_tree_bin(node, print_height=False, indent=0):
     if not node:
         print('\t' * indent + '*')
         return
 
-    print_tree_bin(node.right, indent + 1)
-    print('\t' * indent + str(node.value))
-    print_tree_bin(node.left, indent + 1)
+    print_tree_bin(node.right, print_height, indent + 1)
+    print('\t' * indent + str(node.value) + ('(' + str(node.height) + ')' if print_height else ''))
+    print_tree_bin(node.left, print_height, indent + 1)
 
 
 def find(node, value):
@@ -266,7 +409,7 @@ def find_range(node, start_val, stop_val):
     return _range
 
 
-def insert_bin(node: NodeBin, value) -> Union[NodeBin, None]:
+def insert_bin(node: NodeBin, value, rebalance=False) -> Union[NodeBin, None]:
     place = subtree_search_bin(node, value)
     if place.value == value:
         return
@@ -276,10 +419,12 @@ def insert_bin(node: NodeBin, value) -> Union[NodeBin, None]:
     else:
         place.left = new_node
     new_node.parent = place
+    if rebalance:
+        rebalance_bin(new_node)
     return new_node
 
 
-def delete_bin(node: NodeBin, value) -> Union[NodeBin, None]:
+def delete_bin(node: NodeBin, value, rebalance=False) -> Union[NodeBin, None]:
     found = find_bin(node, value)
     if not found:
         return
@@ -296,7 +441,11 @@ def delete_bin(node: NodeBin, value) -> Union[NodeBin, None]:
                 found.parent.left = only_child  # might be None
             # found node is right child of its parent
             else:
-                found.parent.left = only_child  # might be None
+                found.parent.right = only_child  # might be None
+
+        if rebalance:
+            rebalance_bin(found.parent)
+
         # cut all links
         found.parent = None
         found.left = None
@@ -314,7 +463,7 @@ def delete_bin(node: NodeBin, value) -> Union[NodeBin, None]:
         # because prev_inorder is the right most child from the left subtree of found.
 
         # alternate recursive approach
-        # return delete_bin(prev_inorder, prev_inorder.value)
+        # return delete_bin(prev_inorder, prev_inorder.value, rebalance)
 
         if prev_inorder.parent is found:
             # last_bin was the found.left with no right descendants
@@ -323,6 +472,10 @@ def delete_bin(node: NodeBin, value) -> Union[NodeBin, None]:
         else:
             # prev_inorder is a right child of its whatever parent in the chain
             prev_inorder.parent.right = prev_inorder.left  # (left subtree or None) // prev_inorder has no right child
+
+        if rebalance:
+            rebalance_bin(prev_inorder.parent)
+
         # cut all links
         prev_inorder.parent = None
         prev_inorder.left = None
@@ -409,10 +562,10 @@ def preorder_bin_iter(node):
         n.left and stack.append(n.left)
 
 
-def postorder(node):
+def postorder(node, yield_value=True):
     for child in node.children:
-        yield from postorder(child)
-    yield node.value
+        yield from postorder(child, yield_value)
+    yield node.value if yield_value else node
 
 
 def postorder_iter(node):
@@ -427,12 +580,12 @@ def postorder_iter(node):
         yield stack_2.pop()
 
 
-def postorder_bin(node):
+def postorder_bin(node, yield_value=True):
     if node is None:
         return
-    yield from postorder_bin(node.left)
-    yield from postorder_bin(node.right)
-    yield node.value
+    yield from postorder_bin(node.left, yield_value)
+    yield from postorder_bin(node.right, yield_value)
+    yield node.value if yield_value else node
 
 
 def postorder_bin_iter(node):
@@ -599,8 +752,14 @@ if __name__ == '__main__':
     # print('BFS_BIN', list(bfs_bin(bin_root_one)))
     # print('BFS_BIN', list(bfs_bin_2(bin_root_one)))
 
-    # print_tree(root_one, [])
-    # print_tree_bin(bin_root_one)
+    # print_tree(root_one, path=[], print_height=True)
+
+    insert_bin(bin_root_one, 13.5, rebalance=True)
+    print_tree_bin(bin_root_one, print_height=True)
+    print(delete_bin(bin_root_one, 30, rebalance=True))
+    print(delete_bin(bin_root_one, 28, rebalance=True))
+    print(delete_bin(bin_root_one, 26, rebalance=True))
+    print_tree_bin(bin_root_one, print_height=True)
 
     # print(find(root_one, 'h'))
     # print(find_iter(root_one, 'h'))
