@@ -60,6 +60,22 @@ def lcs(left, right):
     return ''.join([right[idx - 1] for idx in indexes]).strip()
 
 
+def LCS_solution(X, Y, L):
+    """Return the longest common substring of X and Y, given LCS table L."""
+    solution = []
+    j, k = len(X), len(Y)
+    while L[j][k] > 0:
+        if X[j - 1] == Y[k - 1]:
+            solution.append(X[j - 1])
+            j -= 1
+            k -= 1
+        elif L[j - 1][k] >= L[j][k - 1]:
+            j -= 1
+        else:
+            k -= 1
+    return ''.join(reversed(solution))
+
+
 tests = [
     'a01b012c;de0f1g2h',  # 012
     'thisisatest;testing123testing',  # tsitest
