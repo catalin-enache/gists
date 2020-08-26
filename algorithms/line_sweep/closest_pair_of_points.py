@@ -3,6 +3,8 @@ import math
 
 # https://baptiste-wicht.com/posts/2010/04/closest-pair-of-point-plane-sweep-algorithm.html
 # https://www.hackerearth.com/practice/math/geometry/line-sweep-technique/tutorial/
+# https://www.cs.mcgill.ca/~cs251/ClosestPair/ClosestPair1D.html
+# https://www.cs.mcgill.ca/~cs251/ClosestPair/ClosestPairDQ.html
 # https://www.cs.mcgill.ca/~cs251/ClosestPair/ClosestPairPS.html
 # http://www.jn.inf.ethz.ch/education/script/P6_C26.pdf
 
