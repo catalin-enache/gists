@@ -83,3 +83,10 @@ To check if a directed graph is strongly connected run 2 dfs (from random vertex
 One through outgoing edges (if at least 1 node is not reached then the graph is not strongly connected).
 The second one through incoming edges (if at least 1 node is not reached then the graph is not strongly connected).
 */
+/*
+DFS -> undirected graph -> non tree edges are back edges
+    -> directed graph -> non tree edges are either back edges (connects to ancestor) or forward edges (connects to descendant)
+                         or cross edges (connects to neither ancestor neither descendant)
+BFS -> undirected graph -> non tree edges are cross edges
+    -> directed graph -> non tree edges are either back edges or cross edges
+*/
