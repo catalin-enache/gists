@@ -1,6 +1,7 @@
 
 import { Graph } from './graph.js';
 
+// 3.6 Dijkstra Algorithm - Single Source Shortest Path - Greedy Method
 // https://www.youtube.com/watch?v=XB4MIexjvY0&ab_channel=AbdulBari
 
 function getNext(pq, dist) {
