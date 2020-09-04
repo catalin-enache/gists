@@ -1,66 +1,55 @@
 
 import { Graph } from './graph.js';
 
-function getNext(graph, u, dist) {
-  return [...graph.getIncidentEdges(u).keys()].sort(
-    (v1, v2) => dist.get(v1) - dist.get(v2)
-  )[0];
+function getNext(pq, dist) {
+  pq.sort((a, b) => dist.get(b) - dist.get(a));
+  return pq.pop();
 }
 
-function *dijkstra(
-  graph, u,
-  dist = new Map(graph.vertices.map((v) => [v, v === u ? 0 : Number.POSITIVE_INFINITY]))
-) {
-  yield u;
+function dijkstra(graph, s) {
+  const dist = new Map();
+  const pq = [];
 
-  // relaxation
-  for (const [v, edge] of graph.getIncidentEdges(u).entries()) {
-    if (dist.get(u) + edge.value < dist.get(v)) {
-      dist.set(v, dist.get(u) + edge.value);
+  for (const v of graph.vertices) {
+    if (v === s) {
+      dist.set(v, 0)
+    } else {
+      dist.set(v, Infinity)
+    }
+    pq.push(v);
+  }
+
+  while (pq.length) {
+    const u = getNext(pq, dist);
+    // relaxation
+    for (const [v, edge] of graph.getIncidentEdges(u).entries()) {
+      if (dist.get(u) + edge.value < dist.get(v)) {
+        dist.set(v, dist.get(u) + edge.value);
+      }
     }
   }
 
-  // get min from "priority queue"
-  let next = getNext(graph, u, dist);
-
-  if (next) {
-    yield *dijkstra(graph, next, dist);
-  }
+  return dist;
 }
 
-function getNextVertAdjMat(graph, u, dist) {
-  let min = Number.POSITIVE_INFINITY;
-  let idx = null;
-  for (const [v, d] of graph[u].entries()) {
-    // If d then means we have an outgoing edge.
-    if (d && dist[v] < min) {
-      min = d;
-      idx = v;
+function reconstructPath(graph, s, dist) {
+  const tree = new Map();
+  for (const [v, dst] of dist.entries()) {
+    // if (v === s) continue; // ???
+    for (const [u, incomingEdge] of graph.getIncidentEdges(v, false)) {
+      const wgt = incomingEdge.value;
+      if (dst === dist.get(u) + wgt) {
+        tree.set(v, u);
+        // tree.set(v, incomingEdge);
+      }
     }
   }
-  return idx;
+  return tree;
 }
 
-function *dijkstraAdjMat(graph, u, dist = graph[u].reduce((acc, _, v) => {
-  acc[v] = (v === u ? 0 : Number.POSITIVE_INFINITY);
-  return acc;
-}, {})) {
-  yield u;
-  // relaxation
-  for (const [v, d] of graph[u].entries()) {
-    // If d then means we have an outgoing edge.
-    if (d && dist[v] > dist[u] + d) {
-      dist[v] = dist[u] + d;
-    }
-  }
-  const next = getNextVertAdjMat(graph, u, dist);
-  if (next) {
-    yield *dijkstraAdjMat(graph, next, dist);
-  }
-}
 
-var graph = new Graph(true);
-var [v1, v2, v3, v4, v5, v6] = [1, 2, 3, 4, 5, 6].map(graph.addVertex.bind(graph));
+let graph = new Graph(true);
+let [v1, v2, v3, v4, v5, v6] = [1, 2, 3, 4, 5, 6].map(graph.addVertex.bind(graph));
 [
   [v1, v2, 2],
   [v1, v3, 4],
@@ -72,16 +61,30 @@ var [v1, v2, v3, v4, v5, v6] = [1, 2, 3, 4, 5, 6].map(graph.addVertex.bind(graph
   [v4, v6, 1]
 ].forEach((entry) => graph.addEdge(...entry));
 
-console.log([...dijkstra(graph, v1)].map((v) => v.value));
+let dist = dijkstra(graph, v1);
+console.log('dist', dist);
+console.log('path', reconstructPath(graph, v1, dist));
 
-var graph = [
-  [0,  2,  4,  0,  0,  0],
-  [0,  0,  1,  7,  0,  0],
-  [0,  0,  0,  0,  3,  0],
-  [0,  0,  0,  0,  0,  1],
-  [0,  0,  0,  2,  0,  5],
-  [0,  0,  0,  0,  0,  0],
-];
+graph = new Graph(true);
+[v1, v2, v3, v4, v5, v6] = [1, 2, 3, 4, 5, 6].map(graph.addVertex.bind(graph));
+[
+  [v1, v4, 10],
+  [v4, v1, 10],
+  [v1, v3, 45],
+  [v1, v2, 50],
+  [v2, v4, 15],
+  [v4, v5, 15],
+  [v5, v2, 20],
+  [v2, v3, 10],
+  [v3, v5, 30],
+  [v5, v3, 35],
+  [v6, v5, 3],
 
-console.log([...dijkstraAdjMat(graph, 0)]);
+].forEach((entry) => graph.addEdge(...entry));
+
+
+dist = dijkstra(graph, v1);
+console.log('dist', dist);
+console.log('path', reconstructPath(graph, v1, dist));
+
 
