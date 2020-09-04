@@ -1,6 +1,8 @@
 
 import { Graph } from './graph.js';
 
+// https://www.youtube.com/watch?v=XB4MIexjvY0&ab_channel=AbdulBari
+
 function getNext(pq, dist) {
   pq.sort((a, b) => dist.get(b) - dist.get(a));
   return pq.pop();
