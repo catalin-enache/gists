@@ -14,9 +14,14 @@ function countingSort(A, digit, radix) {
   const B = Array.from({ length: A.length }).map(() => 0);
   const C = Array.from({ length: radix }).map(() => 0);
 
+  const getDigit = (num, idx) => {
+    const digits = Math.ceil(log(num, radix));
+    return idx >= digits ? 0 : Math.floor((num / (radix ** digit)) % radix);
+  }
+
   // counts the number of occurrences of each digit in A
   for (let i = 0; i < A.length; i++) {
-    const digitOfAi = Math.floor((A[i] / (radix ** digit)) % radix);
+    const digitOfAi = getDigit(A[i], digit);
     C[digitOfAi] += 1;
   }
 
@@ -25,10 +30,10 @@ function countingSort(A, digit, radix) {
     C[j] = C[j] + C[j - 1];
   }
 
-  for (let m = A.length - 1; m >= 0; m--) { // #to count down (go through A backwards)
-    const digitOfAi = Math.floor((A[m] / (radix ** digit)) % radix);
+  for (let i = A.length - 1; i >= 0; i--) { // # to count down (go through A backwards)
+    const digitOfAi = getDigit(A[i], digit);
     C[digitOfAi] -= 1;
-    B[C[digitOfAi]] = A[m];
+    B[C[digitOfAi]] = A[i];
   }
 
   return B;
@@ -50,6 +55,75 @@ function radixSort(A, radix) {
   return output;
 }
 
+function countingSortString(A, charIdx) {
+  const radix = 256; // alphabet ASCII radix
+  // all strings must have same length (padding right with space if not)
+  const charAt = (s, i) => s.length - 1 < i ? ' ' : s[i];
+  const B = Array.from({ length: A.length }).map(() => 0);
+  const C = Array.from({ length: radix }).map(() => 0);
+
+  for (let i = 0; i < A.length; i += 1) {
+    const str = A[i];
+    const char = charAt(str, charIdx);
+    const charCodeAtIdx = char.charCodeAt(0);
+    C[charCodeAtIdx] += 1;
+  }
+
+  for (let j = 1; j < radix; j++) {
+    C[j] = C[j] + C[j - 1];
+  }
+
+  // Reading from the end to account for charCodeAtIdx being the same for multiple entries
+  // and we need to insert those entries in right order as they were already sorted to the right of charIdx.
+  for (let i = A.length - 1; i >= 0; i -= 1) {
+    const str = A[i];
+    const char = charAt(str, charIdx);
+    const charCodeAtIdx = char.charCodeAt(0);
+    B[--C[charCodeAtIdx]] = str;
+  }
+
+  return B;
+}
+
+function bucketSpreadCollect(A, charIdx) {
+  const radix = 256; // alphabet ASCII radix
+  // all strings must have same length (padding right with space if not)
+  const charAt = (s, i) => s.length - 1 < i ? ' ' : s[i];
+  const B = [];
+  const C = Array.from({ length: radix }).map(() => []);
+
+  for (let i = 0; i < A.length; i += 1) {
+    const str = A[i];
+    const char = charAt(str, charIdx);
+    const charCodeAtIdx = char.charCodeAt(0);
+    C[charCodeAtIdx].push(str);
+  }
+
+  for (let i = 0; i < C.length; i += 1) {
+    const bucket = C[i];
+    while (bucket.length) {
+      B.push(bucket.shift())
+    }
+  }
+
+  return B;
+}
+
+function radixSortString(A) {
+  const maxLength = Math.max(...A.map((s) => s.length));
+  let output = A;
+  for (let charIdx = maxLength - 1; charIdx >= 0; charIdx -= 1) {
+    output = countingSortString(output, charIdx)
+    // output = bucketSpreadCollect(output, charIdx)
+  }
+  return output;
+}
+
 const list = [111, 321, 332, 89, 3245, 45, 2, 7];
 const sorted = radixSort(list, 10);
 console.log(sorted);
+
+const listStr = ['za', 'a', 'ab', 'az', 'fit', 'fis', 'cc', 'cccc', 'bcd',  'c', 'b'];
+// const listStr = ['az', 'ab'];
+const sortedStr = radixSortString(listStr);
+console.log(sortedStr);
