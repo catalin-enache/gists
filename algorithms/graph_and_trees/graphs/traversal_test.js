@@ -1,5 +1,5 @@
 import { Graph } from './graph.js';
-import { bfs, constructPath, dfs } from './traversal.js';
+import { bfs, constructPath, dfs, dfsStack } from './traversal.js';
 
 
 var graph = new Graph(true);
@@ -16,6 +16,7 @@ var [v1, v2, v3, v4, v5, v6] = [1, 2, 3, 4, 5, 6].map(graph.addVertex.bind(graph
 ].forEach((entry) => graph.addEdge(...entry));
 
 var discovered = dfs(graph, v1);
+// var discovered = dfsStack(graph, v1); // different order
 console.log(discovered.keys()); // 1, 2, 3, 5, 4, 6
 console.log(constructPath(v1, v6, discovered)); // 1, 2, 3, 5, 4, 6
 

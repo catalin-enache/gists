@@ -33,6 +33,24 @@ export function bfs(graph, start, discovered = new Map([[start, null]])) {
   return discovered;
 }
 
+export function dfsStack(graph, start) {
+  const stack = [];
+  const discovered = new Map([[start, null]]);
+  stack.push(start);
+
+  while (stack.length) {
+    const current = stack.pop();
+    graph.getIncidentEdges(current).forEach((edge) => {
+      const next = edge.opposite(current);
+      if (!discovered.get(next)) {
+        discovered.set(next, edge);
+        stack.push(next);
+      }
+    });
+  }
+  return discovered;
+}
+
 export function dfs(graph, start, discovered = new Map([[start, null]])) {
   graph.getIncidentEdges(start).forEach((edge) => {
     const next = edge.opposite(start);
