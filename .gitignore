@@ -37,6 +37,7 @@ npm-debug.log
 
 play.*
 test.*
+*.exe
 
 **/__pycache__/*
 
