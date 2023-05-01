@@ -12,10 +12,13 @@ void print_array(int arr[], int size) {
 }
 
 int& ref_function(int& n){
-    // required action --> incrementing
     n += 1;
-    // return reference variable
     return n;
+}
+
+int* ref_function2(int& n){
+    n += 1;
+    return &n;
 }
 
 int main() {
@@ -26,15 +29,15 @@ int main() {
     cout << "a: " << a << "[" << &a << "]" << " b: " << b << "[" << &b << "]" << endl;
     a = 0;
     int &c = ref_function(a);
-    cout << "a: " << a << "[" << &a << "]" << " c: " << c << "[" << &c << "]" << endl;
+    int *d = ref_function2(c);
+    cout << "a: " << a << "[" << &a << "]" << " c: " << c << "[" << &c << "]" << " d: " << *d << "[" << d << "]" << "[" << &d << "]" << endl;
     c += 1;
-    cout << "a: " << a << "[" << &a << "]" << " c: " << c << "[" << &c << "]" << endl;
+    cout << "a: " << a << "[" << &a << "]" << " c: " << c << "[" << &c << "]" << " d: " << *d << "[" << d << "]" << "[" << &d << "]" << endl;
 }
 /*
-a: 1[0xbc70fff6e4] b: 1[0xbc70fff6e0]
-a: 1[0xbc70fff6e4] b: 2[0xbc70fff6e0]
-a: 1[0xbc70fff6e4] c: 1[0xbc70fff6e4]
-a: 2[0xbc70fff6e4] c: 2[0xbc70fff6e4]
-
+a: 1[0x16f9633cc] b: 1[0x16f9633c8]
+a: 1[0x16f9633cc] b: 2[0x16f9633c8]
+a: 2[0x16f9633cc] c: 2[0x16f9633cc] d: 2[0x16f9633cc][0x16f9633b8]
+a: 3[0x16f9633cc] c: 3[0x16f9633cc] d: 3[0x16f9633cc][0x16f9633b8]
 */
 
