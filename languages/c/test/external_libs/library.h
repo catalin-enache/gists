@@ -1,0 +1,6 @@
+#ifndef TESTLIBSTATIC_LIBRARY_H
+#define TESTLIBSTATIC_LIBRARY_H
+
+void hello(void);
+
+#endif //TESTLIBSTATIC_LIBRARY_H

@@ -1,0 +1,15 @@
+C:\Users\catal\AppData\Local\JetBrains\Toolbox\apps\CLion\ch-0\231.9011.31\bin\cmake\win\x64\bin\cmake.exe -DCMAKE_BUILD_TYPE=Debug -DCMAKE_MAKE_PROGRAM=C:/Users/catal/AppData/Local/JetBrains/Toolbox/apps/CLion/ch-0/231.9011.31/bin/ninja/win/x64/ninja.exe -l libTestLibStatic -L external_libs -G Ninja -S D:\Projects\gists -B D:\Projects\gists\cmake-build-debug
+CMake Warning:
+  Ignoring extra path from command line:
+
+   "D:/Projects/gists/cmake-build-debug/libTestLibStatic"
+
+
+CMake Warning:
+  Ignoring extra path from command line:
+
+   "external_libs"
+
+
+CMake Error: Unknown argument -l
+CMake Error: Run 'cmake --help' for all supported options.
