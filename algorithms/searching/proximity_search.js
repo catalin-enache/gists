@@ -37,9 +37,10 @@ export function sortEmployees(employees, searchTerm) {
     const aProximity = Math.min(aFirstNameProximity, aLastNameProximity);
     const bProximity = Math.min(bFirstNameProximity, bLastNameProximity);
 
+    const aName = `${a.first_name} ${a.last_name}`.toLowerCase();
+    const bName = `${b.first_name} ${b.last_name}`.toLowerCase();
+
     if (!searchTerm) {
-      const aName = `${a.first_name} ${a.last_name}`.toLowerCase();
-      const bName = `${b.first_name} ${b.last_name}`.toLowerCase();
       return aName.localeCompare(bName);
     }
 
@@ -54,7 +55,12 @@ export function sortEmployees(employees, searchTerm) {
     }
 
     // If firstName proximities are also equal, compare lastName proximities
-    return aLastNameProximity - bLastNameProximity;
+    if (aLastNameProximity !== bLastNameProximity) {
+      return aLastNameProximity - bLastNameProximity;
+    }
+
+    // If all proximities are equal, sort by name
+    return aName.localeCompare(bName);
   });
 
   return employees;
